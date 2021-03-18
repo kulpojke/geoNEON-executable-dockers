@@ -1,4 +1,4 @@
-# geoNEON executable dockers #
+# geoNEON-executable-dockers #
 
 Dockers with executable scripts to be called from the command line.  I try to make the scripts as flexible as possible but you should examine the dockerfiles and start scripts before using to ensure they make sense for yor system and application.
 
