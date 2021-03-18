@@ -1,8 +1,9 @@
 #!/usr/bin/env Rscript
+
+# parse args
 args = commandArgs(trailingOnly=TRUE)
 site <- args[1]
-date <- args[2]
-write_path <- args[3]
+write_path <- args[2]
 
 # load packages
 library(neonUtilities)
@@ -14,12 +15,8 @@ library(geoNEON)
 # Set global option to NOT convert all character variables to factors
 options(stringsAsFactors=F)
 
-# paths
-write_path <- "."
-site <- "WREF"
-
 # load woody plant veg structure for site
-veg_str <- loadByProduct(dpID="DP1.10098.001", site="WREF", 
+veg_str <- loadByProduct(dpID="DP1.10098.001", site=site, 
                          package="expanded", check.size=F)
 
 # add all of the cryptic items in veg_str to the env
