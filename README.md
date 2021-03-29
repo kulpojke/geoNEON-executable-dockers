@@ -11,6 +11,13 @@ You need to have docker installed (or Singularity).
 Here is the list of executable dockers.  This is a work in progress, more will be added in the future.
 
 ### get_woody_veg_locs ###
-_not done yet_
 Saves a csv of location and plant observation from woody vegetation observations (DP1.10098.001) to pwd.
+
+__SYNOPSIS__
+```start_woodyVeg_docker.sh [site] [outpath]```
+
+Where; 
+
+site is a NEON site abbreviation e.g. BART
+outpath is the path where you want the csv to be written, the path must already exist.
 
