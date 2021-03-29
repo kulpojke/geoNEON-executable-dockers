@@ -19,6 +19,6 @@ __SYNOPSIS__
 
 Where: 
 
-site is a NEON site abbreviation e.g. BART
-outpath is the path where you want the csv to be written, the path must already exist.
+```site``` is a NEON site abbreviation e.g. BART 
+```outpath`` is the path where you want the csv to be written, the path must already exist.
 
