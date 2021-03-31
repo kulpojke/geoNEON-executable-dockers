@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-03-31T21:04:30.359Z" agent="5.0 (X11)" etag="l9EnChIQ4P_3Ebc3Y7w4" version="14.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-31T21:09:06.798Z" agent="5.0 (X11)" etag="Nwvz9T5t653IuG5SvxE2" version="14.5.3" type="github">
   <diagram name="Page-1" id="b520641d-4fe3-3701-9064-5fc419738815">
-    <mxGraphModel dx="3464" dy="2394" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="1663" dy="1218" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -227,8 +227,14 @@
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-67" value="crown.shp" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
           <mxGeometry x="638" y="1000" width="135" height="50" as="geometry" />
         </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-104" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=25;fontColor=#000000;entryX=0.73;entryY=0.001;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-68" target="Jew51ZO0_-qSAj35Bvnx-98">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-68" value="trees.laz" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
           <mxGeometry x="520" y="1450" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-103" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=25;fontColor=#000000;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-76" target="Jew51ZO0_-qSAj35Bvnx-98">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-76" value="labeled polygons" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
           <mxGeometry x="328" y="1450" width="135" height="50" as="geometry" />
@@ -236,11 +242,26 @@
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-82" value="&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;Train and test data consist of crown polygons with labels from woodyVeg. The points in trees.laz can be matchesd to the trees in train test data by id.&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;For the first implementation, species is needed.&amp;nbsp; It might be useful to label trees as canopy or understory in addition to species (it could be useful to run pycrown on sliced subsets for finding understory trees in the delineation phase in order to do this).&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;In future versions we could include dbh, LAI and other infor to asses biomass.&lt;/font&gt;&lt;/div&gt;" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;fontSize=15;align=left;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
           <mxGeometry x="-320" y="1120" width="360.5" height="270" as="geometry" />
         </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-102" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=25;fontColor=#000000;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-95" target="Jew51ZO0_-qSAj35Bvnx-98">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-95" value="&lt;div&gt;hyperspectral.h5&lt;/div&gt;&lt;div&gt;(tiles?)&lt;br&gt;&lt;/div&gt;" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
           <mxGeometry x="130" y="1450" width="135" height="50" as="geometry" />
         </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-97" value="For each crown:" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;" vertex="1" parent="1">
           <mxGeometry x="-250" y="1560" width="230" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-98" value="pointmatch" style="swimlane;html=1;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#e0e0e0;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="245.5" y="1560" width="300" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-99" value="Extract centroid hyperspectral pixel" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-98">
+          <mxGeometry y="26" width="300" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-100" value="crop rgb image to crown (or crown bbox)" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-98">
+          <mxGeometry y="52" width="300" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-101" value="calculate pseudo-waveform" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-98">
+          <mxGeometry y="78" width="300" height="26" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
