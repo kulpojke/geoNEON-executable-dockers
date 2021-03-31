@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-03-31T19:08:43.772Z" agent="5.0 (X11)" etag="jWH7rLxvJx45U3Hrs75I" version="14.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-31T19:09:53.680Z" agent="5.0 (X11)" etag="qj7d_wmHtZ24A0EaqOv7" version="14.5.3" type="github">
   <diagram name="Page-1" id="b520641d-4fe3-3701-9064-5fc419738815">
     <mxGraphModel dx="1684" dy="1261" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
       <root>
@@ -111,6 +111,16 @@
         </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-27" value="RGB tifs" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
           <mxGeometry x="700" y="330" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=0;entryDy=0;exitX=0.497;exitY=1.027;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-30" target="Jew51ZO0_-qSAj35Bvnx-40">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="500" y="760" as="targetPoint" />
+            <mxPoint x="480" y="730" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="444" y="770" />
+              <mxPoint x="533" y="770" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-30" value="CHM" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
           <mxGeometry x="377" y="670" width="135" height="50" as="geometry" />
