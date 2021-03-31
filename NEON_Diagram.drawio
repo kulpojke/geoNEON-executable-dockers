@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-03-31T20:55:45.139Z" agent="5.0 (X11)" etag="4DP-ErmQcDC3MALlyo0s" version="14.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-31T20:58:05.583Z" agent="5.0 (X11)" etag="ravRUdJNMX9tIXGa2j9G" version="14.5.3" type="github">
   <diagram name="Page-1" id="b520641d-4fe3-3701-9064-5fc419738815">
-    <mxGraphModel dx="2282" dy="1622" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="2085" dy="1493" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -187,21 +187,8 @@
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-43" value="Row 4" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-40">
           <mxGeometry y="78" width="160" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="Jew51ZO0_-qSAj35Bvnx-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=15;fontColor=#00CC00;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-57" target="Jew51ZO0_-qSAj35Bvnx-76">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="370" y="1385" />
-              <mxPoint x="300" y="1385" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Jew51ZO0_-qSAj35Bvnx-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=15;fontColor=#00CC00;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-57" target="Jew51ZO0_-qSAj35Bvnx-79">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="420" y="1385" />
-              <mxPoint x="491" y="1385" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-94" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=15;fontColor=#00CC00;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-57" target="Jew51ZO0_-qSAj35Bvnx-76">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-57" value="pointmatch" style="swimlane;html=1;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#e0e0e0;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12" vertex="1" parent="1">
           <mxGeometry x="315.5" y="1220" width="160" height="110" as="geometry" />
@@ -235,22 +222,11 @@
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-68" value="trees.laz" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
           <mxGeometry x="620" y="1440" width="135" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="Jew51ZO0_-qSAj35Bvnx-76" value="train data" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
-          <mxGeometry x="232.75" y="1440" width="135" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="Jew51ZO0_-qSAj35Bvnx-79" value="test data" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
-          <mxGeometry x="423.25" y="1440" width="135" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="Jew51ZO0_-qSAj35Bvnx-84" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=15;fontColor=#00CC00;fillColor=#60a917;strokeColor=#2D7600;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-82">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="120" y="1465" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="-40" y="1465" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-76" value="labeled polygons" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
+          <mxGeometry x="328" y="1450" width="135" height="50" as="geometry" />
         </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-82" value="&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;Train and test data consist of crown polygons with labels from woodyVeg. The points in trees.laz can be matchesd to the trees in train test data by id.&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;For the first implementation, species is needed.&amp;nbsp; It might be useful to label trees as canopy or understory in addition to species (it could be useful to run pycrown on sliced subsets for finding understory trees in the delineation phase in order to do this).&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;In future versions we could include dbh, LAI and other infor to asses biomass.&lt;/font&gt;&lt;/div&gt;" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;fontSize=15;align=left;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="-220.5" y="1150" width="360.5" height="270" as="geometry" />
+          <mxGeometry x="-320" y="1120" width="360.5" height="270" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
