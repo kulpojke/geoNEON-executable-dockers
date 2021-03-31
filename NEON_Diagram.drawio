@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-03-31T20:49:07.236Z" agent="5.0 (X11)" etag="00M23rei0QnaJ6iMWZ71" version="14.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-31T20:51:34.673Z" agent="5.0 (X11)" etag="z9fvpOU1zM_OMce7w0kh" version="14.5.3" type="github">
   <diagram name="Page-1" id="b520641d-4fe3-3701-9064-5fc419738815">
-    <mxGraphModel dx="3070" dy="2137" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="1663" dy="1218" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -249,6 +249,9 @@
         </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-82" value="&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;Train and test data consist of crown polygons with labels from woodyVeg.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;For the first implementation, species is needed.&amp;nbsp; It might be useful to label trees as canopy or understory in addition to species (it could be useful to run pycrown on sliced subsets for finding understory trees in the delineation phase in order to do this).&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#006600&quot;&gt;In future versions we could include dbh, LAI and other infor to asses biomass.&lt;/font&gt;&lt;/div&gt;" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;fontSize=15;align=left;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
           <mxGeometry x="-220.5" y="1150" width="360.5" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-87" value="trees.ept" style="html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fontFamily=Verdana;fontSize=12;align=center;shape=mxgraph.ios7ui.horLines;" vertex="1" parent="1">
+          <mxGeometry x="820" y="1440" width="135" height="50" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
