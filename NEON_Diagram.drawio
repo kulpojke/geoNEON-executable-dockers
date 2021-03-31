@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-03-31T22:21:18.669Z" agent="5.0 (X11)" etag="1clSbGK4x5ZWwuEx-iT7" version="14.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-31T22:21:48.401Z" agent="5.0 (X11)" etag="R5NWjcn7T-xIArx-w7cA" version="14.5.3" type="github">
   <diagram name="Page-1" id="b520641d-4fe3-3701-9064-5fc419738815">
-    <mxGraphModel dx="2789" dy="1953" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="4477" dy="3056" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -246,7 +246,7 @@
           <mxGeometry x="328" y="1450" width="135" height="50" as="geometry" />
         </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-82" value="&lt;div align=&quot;justify&quot;&gt;&lt;font color=&quot;#006600&quot;&gt;labeled polygons consist of crown polygons with labels from woodyVeg and treeID. The points in trees.laz can be matchesd to the trees in train test data by treeID.&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div align=&quot;justify&quot;&gt;&lt;font color=&quot;#006600&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div align=&quot;justify&quot;&gt;&lt;font color=&quot;#006600&quot;&gt;In future versions we could include dbh, LAI and other infor to asses biomass.&lt;/font&gt;&lt;/div&gt;" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;fontSize=15;align=left;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="-320" y="1210" width="360.5" height="180" as="geometry" />
+          <mxGeometry x="740" y="1450" width="360.5" height="180" as="geometry" />
         </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-102" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=25;fontColor=#000000;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-95" target="Jew51ZO0_-qSAj35Bvnx-98">
           <mxGeometry relative="1" as="geometry" />
