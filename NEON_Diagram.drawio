@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-03-31T21:54:12.430Z" agent="5.0 (X11)" etag="KahSU4T71E6DZGain6Xh" version="14.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-31T21:54:55.335Z" agent="5.0 (X11)" etag="F01L4lalSe23xdD807q6" version="14.5.3" type="github">
   <diagram name="Page-1" id="b520641d-4fe3-3701-9064-5fc419738815">
-    <mxGraphModel dx="2282" dy="1622" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="4055" dy="2780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -356,6 +356,68 @@
         </mxCell>
         <mxCell id="Jew51ZO0_-qSAj35Bvnx-140" value="&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;div style=&quot;font-size: 14px;&quot; align=&quot;left&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;input: &amp;nbsp; n = 3 x number of species&lt;/font&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 14px;&quot; align=&quot;left&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;output: n = number of species&lt;/font&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#000000;" vertex="1" parent="1">
           <mxGeometry x="-259.75" y="2030" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-143" value="BNN" style="rounded=1;whiteSpace=wrap;html=1;fontSize=25;fontColor=#000000;align=right;labelPosition=left;verticalLabelPosition=top;verticalAlign=bottom;" vertex="1" parent="1">
+          <mxGeometry x="714" y="2268" width="860" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-145" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=25;fontColor=#000000;entryX=0.149;entryY=0.006;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-146" target="Jew51ZO0_-qSAj35Bvnx-160">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1086" y="2457" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-146" value="rgb_bayesian_cnn" style="swimlane;html=1;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#e0e0e0;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="1009.75" y="2298" width="160" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-147" value="On RGB data" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-146">
+          <mxGeometry y="26" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-148" value="split data into train and val" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-146">
+          <mxGeometry y="52" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-149" value="maybe stratify the split" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-146">
+          <mxGeometry y="78" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-150" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=25;fontColor=#000000;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-151" target="Jew51ZO0_-qSAj35Bvnx-160">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-151" value="pseudowaveform_bnn" style="swimlane;html=1;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#e0e0e0;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="1199.75" y="2298" width="160" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-152" value="On RGB data" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-151">
+          <mxGeometry y="26" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-153" value="split data into train and val" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-151">
+          <mxGeometry y="52" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-154" value="maybe stratify the split" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-151">
+          <mxGeometry y="78" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-155" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=25;fontColor=#000000;entryX=0.851;entryY=-0.006;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Jew51ZO0_-qSAj35Bvnx-156" target="Jew51ZO0_-qSAj35Bvnx-160">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-156" value="hyper_bnn" style="swimlane;html=1;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#e0e0e0;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="1389.75" y="2298" width="160" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-157" value="On RGB data" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-156">
+          <mxGeometry y="26" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-158" value="split data into train and val" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-156">
+          <mxGeometry y="52" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-159" value="maybe stratify the split" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-156">
+          <mxGeometry y="78" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-160" value="fusion_bnn_layers" style="swimlane;html=1;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#e0e0e0;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="1009.75" y="2458" width="540" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-161" value="Thin" style="text;html=1;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Jew51ZO0_-qSAj35Bvnx-160">
+          <mxGeometry y="26" width="540" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-162" value="&lt;div style=&quot;font-size: 14px&quot; align=&quot;left&quot;&gt;&lt;font style=&quot;font-size: 14px&quot;&gt;each output:&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 14px&quot; align=&quot;left&quot;&gt;&lt;font style=&quot;font-size: 14px&quot;&gt;n = number of species&lt;/font&gt;&lt;font style=&quot;font-size: 14px&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="744.25" y="2388" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Jew51ZO0_-qSAj35Bvnx-163" value="&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;div style=&quot;font-size: 14px;&quot; align=&quot;left&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;input: &amp;nbsp; n = 3 x number of species&lt;/font&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 14px;&quot; align=&quot;left&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;output: n = number of species&lt;/font&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="744.25" y="2438" width="240" height="50" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
