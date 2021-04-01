@@ -30,4 +30,4 @@ echo $SITE
 echo $DIR
 
 docker build docker -t woodyveg_docker && \
-docker run --rm -v $PWD:/data -e USER=$USER -e HOME=/data -w /data  woodyveg_docker $SITE $DIR
+docker run --rm -v $PWD:/data -v $DIR:/data2 -e USER=$USER -e HOME=/data -w /data  woodyveg_docker $SITE 

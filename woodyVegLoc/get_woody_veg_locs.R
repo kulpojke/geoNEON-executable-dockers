@@ -3,7 +3,6 @@
 # parse args
 args = commandArgs(trailingOnly=TRUE)
 site <- args[1]
-write_path <- args[2]
 
 # load packages
 library(neonUtilities)
@@ -31,5 +30,5 @@ veg <- merge(vst_apparentindividual, vegmap, by=c("individualID","namedLocation"
 
 # write veg to csv
 fname <- paste(site, "_woodyVeg.csv", sep="")
-fwrite(veg, paste(write_path, fname,sep='/'))
+fwrite(veg, paste('/data2', fname,sep='/'))
 
