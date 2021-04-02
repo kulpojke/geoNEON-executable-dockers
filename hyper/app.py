@@ -151,8 +151,6 @@ if __name__ == '__main__':
                         ''')
     parser.add_argument('--site', type=str, required=True, help='NEON site code, e.g. TEAK')
     parser.add_argument('--date', type=str, required=False, help='date for which to access, if you don\'t know see --show_dates')
-    parser.add_argument('--data_path', type=str, required=False, help='location to save downloaded files')
-
     parser.add_argument('--show_dates', action='store_true', required=False, help='Show available dates for the site and productcode')
     args = parser.parse_args()  
 
@@ -164,10 +162,7 @@ if __name__ == '__main__':
     # find available files and their urls etc...
     t0, files = generate_download_info(productcode, site, date)
 
-    if args.data_path:
-        data_path = args.data_path
-    else:
-        data_path = './tmp'
+    data_path = /data2
 
     os.makedirs(data_path, exist_ok=True)
 
