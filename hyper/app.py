@@ -74,6 +74,7 @@ def download_from_NEON_API(f, data_path):
 
 def show_dates(site, productcode):
     '''returns available dates for site and product'''
+    raise Error('Not yet implemented.')
     
     base_url = 'https://data.neonscience.org/api/v0/'
 
@@ -160,7 +161,7 @@ if __name__ == '__main__':
         exit()
           
     # find available files and their urls etc...
-    t0, files = generate_download_info(productcode, site, date)
+    t0, files = generate_download_info(args.productcode, args.site, args.date)
 
     #TODO: change this wehn it goes back into docker
     data_path = './data2'
@@ -174,5 +175,6 @@ if __name__ == '__main__':
 
     _ = compute(lazy)
 
+    print('list of failed downloads:')
     print(*(f for f in _ if f != None))
     print('Finished downloading.')
