@@ -1,15 +1,11 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import h5py
 import requests
 import hashlib
-import zlib
 import binascii
 import time
 import os
 import argparse
-from osgeo import gdal
+
 from dask import delayed, compute
 
 
@@ -140,7 +136,7 @@ if __name__ == '__main__':
     genrate_download_info, fix the crc32 checker in download_from_NEON_API(), check to see if we are importing unused modules'''
 
     print('''Warning!!! the crc32 checker is not functional yet, there is no assurance h5 is not corrupt!
-    Though chances aare it is fine.''')
+    Though chances are it is fine.''')
 
     # parse args
     parser = argparse.ArgumentParser()

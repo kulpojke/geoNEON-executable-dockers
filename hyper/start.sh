@@ -18,9 +18,6 @@ while getopts ":hs" option; do
         exit;;
       s) # show dates available
         SHOWDATES=true
-     \?) # incorrect option
-         echo "Error: Invalid option"
-         exit;;
    esac
 done
 
@@ -30,6 +27,7 @@ SITE=$2
 if [ "$SHOWDATES" = true ] ; then
    docker build docker -t hyper_docker && \
    docker run --rm -it -v $PWD:/data -e USER=$USER -e HOME=/data -w /data  hyper_docker s
+fi
 
 DATE=$3
 DATAPATH=$4
