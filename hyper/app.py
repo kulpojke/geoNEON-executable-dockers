@@ -164,7 +164,7 @@ if __name__ == '__main__':
     t0, files = generate_download_info(args.productcode, args.site, args.date)
 
     #TODO: change this wehn it goes back into docker
-    data_path = './data2'
+    data_path = '/data2'
 
     os.makedirs(data_path, exist_ok=True)
 
