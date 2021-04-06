@@ -164,7 +164,7 @@ if __name__ == '__main__':
 
     os.makedirs(data_path, exist_ok=True)
 
-
+    print(f'{len(files)} files will be downloaded.')
     lazy = []
     for f in files:
         lazy.append(delayed(download_from_NEON_API)(f, data_path))
