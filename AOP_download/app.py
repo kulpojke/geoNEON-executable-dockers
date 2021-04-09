@@ -1,15 +1,11 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import h5py
 import requests
 import hashlib
-import zlib
 import binascii
 import time
 import os
 import argparse
-from osgeo import gdal
+
 from dask import delayed, compute
 
 
@@ -178,7 +174,7 @@ if __name__ == '__main__':
 
     os.makedirs(data_path, exist_ok=True)
 
-
+    print(f'{len(files)} files will be downloaded.')
     lazy = []
     for f in files:
         lazy.append(delayed(download_from_NEON_API)(f, data_path))
