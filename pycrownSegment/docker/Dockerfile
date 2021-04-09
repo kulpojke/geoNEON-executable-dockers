@@ -21,3 +21,7 @@ RUN cd pycrown \
 && ls pycrown \ 
 && pip3 install -r requirements.txt \
 && python3 /pycrown/setup.py install --verbose
+
+COPY file.sh /
+RUN  chmod 777 file.sh
+ENTRYPOINT ["/file.sh"]
