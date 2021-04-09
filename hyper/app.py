@@ -111,6 +111,14 @@ def generate_download_info(productcode, site, date):
             if productcode == 'DP1.30003.001':
                 if 'classified_point_cloud_colorized.laz' in file['name']:
                     desired.append(file)
+            # the CHM case
+            elif productcode == 'DP3.30015.001':
+                if '.tif' in file['name']:
+                    desired.append(file)
+            # the DSM or DTM case
+            elif productcode == 'DP3.30024.001':
+                if '.tif' in file['name']:
+                    desired.append(file)
             # the hyperspectral reflectance case
             elif productcode == 'DP3.30006.001':
                 if file['name'].endswith('.h5'):
@@ -140,7 +148,7 @@ if __name__ == '__main__':
     genrate_download_info, fix the crc32 checker in download_from_NEON_API(), check to see if we are importing unused modules'''
 
     print('''Warning!!! the crc32 checker is not functional yet, there is no assurance h5 is not corrupt!
-    Though chances aare it is fine.''')
+    Though chances are it is fine.''')
 
     # parse args
     parser = argparse.ArgumentParser()
@@ -149,6 +157,8 @@ if __name__ == '__main__':
                         DP1.30010.001  --  RGB orthorectified imagery
                         DP3.30006.001  --  Hyperspectral reflectance mosaic
                         DP1.30003.001  --  Discrete return LiDAR point cloud
+                        DP3.30024.001  --  DSM and DTM tifs
+                        DP3.30015.001  --  CHM tifs
                         ''')
     parser.add_argument('--site', type=str, required=True, help='NEON site code, e.g. TEAK')
     parser.add_argument('--date', type=str, required=False, help='date for which to access, if you don\'t know see --show_dates')
