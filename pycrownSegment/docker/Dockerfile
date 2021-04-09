@@ -1,4 +1,4 @@
-ROM ubuntu:20.04
+FROM ubuntu:20.04
 SHELL [ "/bin/bash", "--login", "-c" ]
 WORKDIR /
 
@@ -25,3 +25,10 @@ RUN cd pycrown \
 COPY file.sh /
 RUN  chmod 777 file.sh
 ENTRYPOINT ["/file.sh"]
+
+
+# This Docker is for running:
+# PyCrown - Fast raster-based individual tree segmentation for LiDAR data
+# -----------------------------------------------------------------------
+# Copyright: 2018, Jan Zörner
+# Licence: GNU GPLv3
