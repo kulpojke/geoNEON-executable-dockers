@@ -1,4 +1,5 @@
 FROM rocker/geospatial:4.0.2
+LABEL maintainer="michaelhuggins@protonmail.com"
 
 RUN R -e 'options(warn=2); install.packages(c("devtools", "neonUtilities","raster", "data.table", "rgdal" )); devtools::install_github("NEONScience/NEON-geolocation/geoNEON")'
 
