@@ -6,6 +6,7 @@ import numpy as np
 import fiona
 import argparse
 from glob import glob
+import re
 
 def export_tree_locations(PC, loc='top'):
     """ Convert tree top raster indices to georeferenced 3D point shapefile
@@ -119,7 +120,7 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
     parser.add_argument('--dir')
-    parser.add_argument('--prfx')
+    parser.add_argument('--prfx', default='[0-9]*_[0-9]*')
     parser.add_argument('--dsm')
     parser.add_argument('--dtm')
     parser.add_argument('--chm')
@@ -137,10 +138,14 @@ if __name__ == '__main__':
         chms = glob('*_CHM.tif')
         dsms = glob('*_DSM.tif')
         dtms = glob('*_DTM.tif')
-        points = glob('*.laz')
+        lazs = glob('*.laz')
 
         # match up the tiles using the args.prfx (which is a pattern)
-
+        A = set(re.findall(r'\d{4,9}_\d{4,9}', chms))
+        B = set(re.findall(r'\d{4,9}_\d{4,9}', dsms))
+        C = set(re.findall(r'\d{4,9}_\d{4,9}', dtms))
+        laz_tiles = set(re.findall(r'\d{4,9}_\d{4,9}', lazs))
+        common = A | B | C
 
     else:
         F_CHM = args.chm
@@ -148,5 +153,5 @@ if __name__ == '__main__':
         F_DSM = args.dsm
         F_LAS = args.points
 
-    print('Would run:')
-    print(f'do_the_delineation({F_CHM}, {F_DTM}, {F_DSM}, {F_LAS}')
+    #print(common)
+    #print(f'do_the_delineation({F_CHM}, {F_DTM}, {F_DSM}, {F_LAS}')
