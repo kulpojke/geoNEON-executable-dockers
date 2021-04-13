@@ -153,5 +153,5 @@ if __name__ == '__main__':
         F_DSM = args.dsm
         F_LAS = args.points
 
-    #print(common)
+    print(common)
     #print(f'do_the_delineation({F_CHM}, {F_DTM}, {F_DSM}, {F_LAS}')
