@@ -1,19 +1,33 @@
 #!/bin/sh
 
-while getopts ":hs" option; do
+while getopts ":h" option; do
    case $option in
       h) # display Help
         echo "SYNOPSIS"  
-        echo "     start.sh [site] [outpath]"
+        echo "     start.sh [site] [datapath]"
         echo "        -- site is a NEON site abbreviation e.g. BART"
-        echo "        -- outpath is the path where you want the h5"
-        echo "           to be written, must exist"
+        echo "        -- datapath is the path where CHM, DSM, DTM and laz"
+        echo "           are stored"
+        echo "        -- prefix - prefix to determine which files in datapath"
+        echo "           will be used.  See description for more details."
         echo "DESCRIPTION"
-        echo "     Saves a csv of location and plant observation from"
-        echo "     woody vegetation observations (DP1.10098.001) to pwd."
+        echo "     Uses PyCrown to delineate tree canopies.  Writes two shapefiles;"
+        echo "     one with crown polygons, and one with crown peaks as points; as"
+        echo "     well as a laz file with each tree containing a unique ID"
+        echo "     "
+        echo "     globs files from the directory designated by datapath with"
+        echo "     *prefix*.tif, and *prefix*.laz (or *prefix*.las)  "
         exit;;
    esac
 done
+
+
+echo "Using:"
+echo "PyCrown - Fast raster-based individual tree segmentation for LiDAR data"
+echo "-----------------------------------------------------------------------"
+echo "Copyright: 2018, Jan Zörner"
+echo "Licence: GNU GPLv3"
+
 
 PRODUCTCODE=$1
 SITE=$2
