@@ -145,7 +145,8 @@ if __name__ == '__main__':
         B = set(re.findall(r'\d{4,9}_\d{4,9}', dsms))
         C = set(re.findall(r'\d{4,9}_\d{4,9}', dtms))
         laz_tiles = set(re.findall(r'\d{4,9}_\d{4,9}', lazs))
-        common = A | B | C
+        common = A & B & C
+        not_common = (A ^ B) ^ (B ^ C)
 
     else:
         F_CHM = args.chm
@@ -153,5 +154,5 @@ if __name__ == '__main__':
         F_DSM = args.dsm
         F_LAS = args.points
 
-    print(common)
+    print(f'common: {common}\nnot:{not_common}')
     #print(f'do_the_delineation({F_CHM}, {F_DTM}, {F_DSM}, {F_LAS}')
