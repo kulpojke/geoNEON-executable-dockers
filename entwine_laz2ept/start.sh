@@ -12,6 +12,9 @@ while getopts ":h" option; do
 done
 
 DATAPATH=$1
+OUTPATH=$2
 
 docker build docker -t entwine_docker && \
-docker run --rm -it -v $PWD:/data -v $DATAPATH:/data2 -e USER=$USER -e HOME=/data -w /data  entwine_docker 
+docker run --rm -it -v $PWD:/data -v $DATAPATH:/data2 -e USER=$USER -e HOME=/data -w /data  entwine_docker $DATAPATH $OUTPATH
+
+# ./start.sh /home/kulpojke/data /home/kulpojke/entwine
