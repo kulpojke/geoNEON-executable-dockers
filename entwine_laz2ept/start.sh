@@ -15,6 +15,6 @@ DATAPATH=$1
 OUTPATH=$2
 
 docker build docker -t entwine_docker && \
-docker run --rm -it -v $PWD:/data -v $DATAPATH:/data2 -e USER=$USER -e HOME=/data -w /data  entwine_docker $DATAPATH $OUTPATH
+docker run --rm -it -v $PWD:/data -v $DATAPATH:/data2 -v $OUTPATH:/data3 -e USER=$USER -e HOME=/data -w /data entwine_docker
 
-# ./start.sh /home/kulpojke/data /home/kulpojke/entwine
+# ./start.sh /home/kulpojke/data/laz /home/kulpojke/entwine
