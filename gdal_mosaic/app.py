@@ -22,9 +22,28 @@ if __name__ == '__main__':
     CHMs = glob(os.path.join(args.datapath, '*_CHM.tif'))
     DSMs = glob(os.path.join(args.datapath, '*_DSM.tif'))
     DTMs = glob(os.path.join(args.datapath, '*_DTM.tif'))
-    LAZs = glob(os.path.join(args.datapath, '*.laz'))
+    
+    # make them into a nasty string for calling gdal merge
+    chm = ' '.join(CHMs)
+    dsm = ' '.join(DSMs)
+    dtm = ' '.join(DTMs)
+    
+    # call gdalbuildvrt for CHM
+    in_ = os.path.join(args.datapath, '*_CHM.tif')
+    out = os.path.join(args.datapath, 'chm.vrt')
+    cmd = f'gdalbuildvrt {out} {in_}'
+    _ = subprocess.run(cmd, shell=True, capture_output=True)
 
-    for chm in CHMs:
-        print(chm)
+    # call gdalbuildvrt for DSM
+    in_ = os.path.join(args.datapath, '*_DSM.tif')
+    out = os.path.join(args.datapath, 'dsm.vrt')
+    cmd = f'gdalbuildvrt {out} {in_}'
+    _ = subprocess.run(cmd, shell=True, capture_output=True)
+
+    # call gdalbuildvrt for DTM
+    in_ = os.path.join(args.datapath, '*_DTM.tif')
+    out = os.path.join(args.datapath, 'dtm.vrt')
+    cmd = f'gdalbuildvrt {out} {in_}'
+    _ = subprocess.run(cmd, shell=True, capture_output=True)
 
     print('done!')
