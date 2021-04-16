@@ -1,0 +1,27 @@
+#!/bin/sh
+
+while getopts ":h" option; do
+   case $option in
+      h) # display Help
+        echo "SYNOPSIS"  
+        echo "     has args"
+        echo "DESCRIPTION"
+        echo "     does things"
+        exit;;
+   esac
+done
+
+OUTPATH=$1
+DATAPATH=$2
+CHM=$3
+DTM=$4
+DSM=$5
+EPT=$6
+BBOX=$7
+SRS=$8
+
+
+docker build docker -t rasterio_bbox_docker && \
+docker run --rm -it -v $PWD:/work  -v $OUTPATH:/out -v $DATAPATH:/data -e USER=$USER -e HOME=/work -w /work rasterio_bbox_docker /data/$CHM /data/$DTM /data/$DSM /data/$EPT $BBOX $SRS
+
+#./start.sh /media/data/AOP/train /media/data/AOP data/chm.vrt data/dtm.vrt data/dsm.vrt entwine/ '([319360,319417],[4096006,4096052])' EPSG:26911
