@@ -11,18 +11,6 @@ import affine
 
 
 
-def srs_to_pixel_coords(x, y, r,  srs):
-    '''Converts from supplied srs to pixel coords of the supplied tiff. 
-        -- x   - int or float - x coord in srs
-        -- y   - int or float - y coord in srs
-        -- r   - str - path to raster of which to convert to pixel coords of (awkward phrase!)
-        -- srs - str - Source srs, e.g. 'EPSG:26911'
-    ''' 
-    with rasterio.open(r) as data: 
-        
-        dx = data.bounds.right - data.bounds.left
-        dx = data.bounds.top - data.bounds.bottom
-
 
 if __name__ == '__main__':
     '''Returns subsets of supplied files clipped to bbox supplied in command or multiple bboes specified in file using --bbxf '''
@@ -41,17 +29,17 @@ if __name__ == '__main__':
     parser.add_argument('--out', type=str, required=True, help='path to output directory')
     args = parser.parse_args()  
 
-    # un-string the bbox
+    # unpack the bbox string
     xmin, xmax, ymin, ymax = args.bbox.strip('()').replace('[', '').replace(']','').split(',')
     xmin = float(xmin)
     xmax = float(xmax)
     ymin = float(ymin)
     ymax = float(ymax)
     
-    bbox = ([xmin, xmax], [ymin, ymax])
+    # make a tag for the output file
     tag = f'{xmin}_{xmax}_{ymin}_{ymax}'
 
-    # convert the bbox to pixel values for chm
+    # convert the bbox values from crs to pixel values for chm
     with rasterio.open(args.chm) as data:
         profile = data.profile
         chm_vrt = WarpedVRT(data, crs=data.meta['crs'], transform=data.meta['transform'], width=data.meta['width'], height=data.meta['height'])
@@ -71,18 +59,15 @@ if __name__ == '__main__':
     
     
     tile =  chm_vrt.read(1,window=chm_window)
-    print('------------------------------------------------')
     A = affine.Affine( profile['transform'][0],
                        profile['transform'][1],
-                       row_off, 
+                       xmin, 
                        profile['transform'][3],
                        profile['transform'][4],
-                       col_off)
+                       ymax)
     height, width = tile.shape
     profile.update(width=width, height=height, driver='GTiff', transform=A)
-    print(profile['transform'])
-    print('----------xx------------------------------------')
-    print(chm_vrt.transform)
+    
     
     
     fname = os.path.join(args.out, f'{tag}_chm.tif')
@@ -90,6 +75,9 @@ if __name__ == '__main__':
     
     with rasterio.open(fname, 'w', **profile) as dst:
         dst.write(tile, 1)
+
+    
+    print('-------------------------------------------------------------------\nDone!')
 
 
     
