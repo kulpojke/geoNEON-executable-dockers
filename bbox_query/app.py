@@ -3,6 +3,7 @@ from rasterio.windows import Window
 from rasterio.vrt import WarpedVRT
 import argparse
 import os
+import affine
 
 
 
@@ -52,7 +53,7 @@ if __name__ == '__main__':
 
     # convert the bbox to pixel values for chm
     with rasterio.open(args.chm) as data:
-
+        profile = data.profile
         chm_vrt = WarpedVRT(data, crs=data.meta['crs'], transform=data.meta['transform'], width=data.meta['width'], height=data.meta['height'])
 
         chm_ymin, chm_xmin = data.index(xmin, ymin)
@@ -61,7 +62,7 @@ if __name__ == '__main__':
     row_off = chm_ymin
     width = abs(chm_xmax - chm_xmin)
     height = abs(chm_ymax - chm_ymin)
-    print(f'{width} v {chm_vrt.width}')
+
 
     #TODO: make this a list of windows, then loop through so we can use bbxf
     # create window with pixel values
@@ -69,10 +70,26 @@ if __name__ == '__main__':
 
     
     
-    with chm_vrt.read(1,window=chm_window) as tile:
-        fname = os.path.join(args.out, f'{tag}_chm.tif')
-        os.makedirs(args.out, exist_ok=True)
-        tile.write(fname)
+    tile =  chm_vrt.read(1,window=chm_window)
+    print('------------------------------------------------')
+    A = affine.Affine( profile['transform'][0],
+                       profile['transform'][1],
+                       row_off, 
+                       profile['transform'][3],
+                       profile['transform'][4],
+                       col_off)
+    height, width = tile.shape
+    profile.update(width=width, height=height, driver='GTiff', transform=A)
+    print(profile['transform'])
+    print('----------xx------------------------------------')
+    print(chm_vrt.transform)
+    
+    
+    fname = os.path.join(args.out, f'{tag}_chm.tif')
+    os.makedirs(args.out, exist_ok=True)
+    
+    with rasterio.open(fname, 'w', **profile) as dst:
+        dst.write(tile, 1)
 
 
     
