@@ -6,7 +6,28 @@ import os
 import affine
 
 
+def vrt_window_query(vrt, profile, col_off, row_off, width, height, tag, outpath):
 
+    # create window with pixel values
+    window = Window(col_off, row_off, width, height)
+
+    tile =  vrt.read(1,window=window)
+    A = affine.Affine( profile['transform'][0],
+                       profile['transform'][1],
+                       xmin, 
+                       profile['transform'][3],
+                       profile['transform'][4],
+                       ymax)
+    height, width = tile.shape
+    profile.update(width=width, height=height, driver='GTiff', transform=A)
+    
+    
+    
+    fname = os.path.join(outpath, f'{tag}_chm.tif')
+    os.makedirs(outpath, exist_ok=True)
+    
+    with rasterio.open(fname, 'w', **profile) as dst:
+        dst.write(tile, 1)
 
 
 
@@ -42,7 +63,7 @@ if __name__ == '__main__':
     # convert the bbox values from crs to pixel values for chm
     with rasterio.open(args.chm) as data:
         profile = data.profile
-        chm_vrt = WarpedVRT(data, crs=data.meta['crs'], transform=data.meta['transform'], width=data.meta['width'], height=data.meta['height'])
+        vrt = WarpedVRT(data, crs=data.meta['crs'], transform=data.meta['transform'], width=data.meta['width'], height=data.meta['height'])
 
         chm_ymin, chm_xmin = data.index(xmin, ymin)
         chm_ymax, chm_xmax = data.index(xmax, ymax)
@@ -53,28 +74,9 @@ if __name__ == '__main__':
 
 
     #TODO: make this a list of windows, then loop through so we can use bbxf
-    # create window with pixel values
-    chm_window = Window(col_off, row_off, width, height)
+    vrt_window_query(vrt, profile, col_off, row_off, width, height, tag, args.out)
 
-    
-    
-    tile =  chm_vrt.read(1,window=chm_window)
-    A = affine.Affine( profile['transform'][0],
-                       profile['transform'][1],
-                       xmin, 
-                       profile['transform'][3],
-                       profile['transform'][4],
-                       ymax)
-    height, width = tile.shape
-    profile.update(width=width, height=height, driver='GTiff', transform=A)
-    
-    
-    
-    fname = os.path.join(args.out, f'{tag}_chm.tif')
-    os.makedirs(args.out, exist_ok=True)
-    
-    with rasterio.open(fname, 'w', **profile) as dst:
-        dst.write(tile, 1)
+
 
     
     print('-------------------------------------------------------------------\nDone!')
