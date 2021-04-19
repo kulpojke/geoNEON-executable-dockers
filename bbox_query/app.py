@@ -6,7 +6,32 @@ import os
 import affine
 
 
-def vrt_window_query(vrt, profile, col_off, row_off, width, height, tag, outpath):
+def vrt_window_query(xmin, xmax, ymin, ymax, raster, outpath, tag=None):
+    '''Reads the extent - given by xmin, xmax, ymin, ymax - from a vrt and writes a GEOtiff to outpath. '''
+
+
+    # make a tag for the output file
+    if tag:
+        loc = f'{xmin}_{xmax}_{ymin}_{ymax}'
+        f = f'{loc}_{tag}.tif'
+    else:
+        f = f'{xmin}_{xmax}_{ymin}_{ymax}.tif'
+
+    # convert the bbox values from crs to pixel values for chm
+    with rasterio.open(raster) as data:
+        width = data.meta['width']
+        height = data.meta['height']
+        profile = data.profile
+        vrt = WarpedVRT(data, crs=data.meta['crs'], transform=data.meta['transform'], width=width, height=height)
+
+        chm_ymin, chm_xmin = data.index(xmin, ymin)
+        chm_ymax, chm_xmax = data.index(xmax, ymax)
+
+    # origin in upper left corner    
+    col_off = chm_xmin
+    row_off = chm_ymax
+    width = abs(chm_xmax - chm_xmin)
+    height = abs(chm_ymax - chm_ymin)
 
     # create window with pixel values
     window = Window(col_off, row_off, width, height)
@@ -27,7 +52,7 @@ def vrt_window_query(vrt, profile, col_off, row_off, width, height, tag, outpath
     profile.update(width=width, height=height, driver='GTiff', transform=A)
     
     # make outfile name and make sure dir exists
-    fname = os.path.join(outpath, f'{tag}_chm.tif')
+    fname = os.path.join(outpath, f)
     os.makedirs(outpath, exist_ok=True)
     
     # write the window as a tiff 
@@ -39,7 +64,7 @@ def vrt_window_query(vrt, profile, col_off, row_off, width, height, tag, outpath
 
 
 if __name__ == '__main__':
-    '''Returns subsets of supplied files clipped to bbox supplied in command or multiple bboes specified in file using --bbxf '''
+    '''Returns subsets of supplied files clipped to bbox supplied in command or multiple bboxs specified in file using --bbxf '''
 
     # parse args
     parser = argparse.ArgumentParser()
@@ -55,33 +80,37 @@ if __name__ == '__main__':
     parser.add_argument('--out', type=str, required=True, help='path to output directory')
     args = parser.parse_args()  
 
-    # unpack the bbox string
-    xmin, xmax, ymin, ymax = args.bbox.strip('()').replace('[', '').replace(']','').split(',')
-    xmin = float(xmin)
-    xmax = float(xmax)
-    ymin = float(ymin)
-    ymax = float(ymax)
+
+
+    # make list off bboxes
+    if args.bbox:
+        bboxes = [args.bbox]
+    elif args.bbxf:
+        bboxes = []
+        #try:
+        with open(args.bbxf) as bxs:
+            for line in bxs:
+                bboxes.append(line)
+    else:
+        print('One must either specify --bbox or --bbxf')
     
-    # make a tag for the output file TODO: move this into vrt_window_query
-    tag = f'{xmin}_{xmax}_{ymin}_{ymax}'
-
-    # convert the bbox values from crs to pixel values for chm
-    with rasterio.open(args.chm) as data:
-        width = data.meta['width']
-        height = data.meta['height']
-        profile = data.profile
-        vrt = WarpedVRT(data, crs=data.meta['crs'], transform=data.meta['transform'], width=width, height=height)
-
-        chm_ymin, chm_xmin = data.index(xmin, ymin)
-        chm_ymax, chm_xmax = data.index(xmax, ymax)
-    col_off = chm_xmin
-    row_off = chm_ymax
-    width = abs(chm_xmax - chm_xmin)
-    height = abs(chm_ymax - chm_ymin)
 
 
-    #TODO: make this a list of windows, then loop through so we can use bbxf
-    vrt_window_query(vrt, profile, col_off, row_off, width, height, tag, args.out)
+    for bbox in bboxes:
+        # unpack the bbox string
+        xmin, xmax, ymin, ymax = bbox.strip('()').replace('[', '').replace(']','').split(',')
+        xmin = float(xmin)
+        xmax = float(xmax)
+        ymin = float(ymin)
+        ymax = float(ymax)
+
+        # read and write the window for each raster
+        vrt_window_query(xmin, xmax, ymin, ymax, args.chm, args.out, tag='chm')
+        vrt_window_query(xmin, xmax, ymin, ymax, args.dsm, args.out, tag='dsm')
+        vrt_window_query(xmin, xmax, ymin, ymax, args.dtm, args.out, tag='dtm')
+
+        # TODO: make a laz for the window from ept.
+        
 
 
 
