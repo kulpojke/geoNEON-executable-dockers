@@ -11,21 +11,26 @@ def vrt_window_query(vrt, profile, col_off, row_off, width, height, tag, outpath
     # create window with pixel values
     window = Window(col_off, row_off, width, height)
 
+    # read the window from the vrt
     tile =  vrt.read(1,window=window)
+
+    # create new affine transform to write tile in the right place
+    # TODO: xmin y min are global, better they be passed to this function explicitly?
     A = affine.Affine( profile['transform'][0],
                        profile['transform'][1],
                        xmin, 
                        profile['transform'][3],
                        profile['transform'][4],
                        ymax)
-    height, width = tile.shape
+    
+    # update the profile
     profile.update(width=width, height=height, driver='GTiff', transform=A)
     
-    
-    
+    # make outfile name and make sure dir exists
     fname = os.path.join(outpath, f'{tag}_chm.tif')
     os.makedirs(outpath, exist_ok=True)
     
+    # write the window as a tiff 
     with rasterio.open(fname, 'w', **profile) as dst:
         dst.write(tile, 1)
 
@@ -57,18 +62,20 @@ if __name__ == '__main__':
     ymin = float(ymin)
     ymax = float(ymax)
     
-    # make a tag for the output file
+    # make a tag for the output file TODO: move this into vrt_window_query
     tag = f'{xmin}_{xmax}_{ymin}_{ymax}'
 
     # convert the bbox values from crs to pixel values for chm
     with rasterio.open(args.chm) as data:
+        width = data.meta['width']
+        height = data.meta['height']
         profile = data.profile
-        vrt = WarpedVRT(data, crs=data.meta['crs'], transform=data.meta['transform'], width=data.meta['width'], height=data.meta['height'])
+        vrt = WarpedVRT(data, crs=data.meta['crs'], transform=data.meta['transform'], width=width, height=height)
 
         chm_ymin, chm_xmin = data.index(xmin, ymin)
         chm_ymax, chm_xmax = data.index(xmax, ymax)
     col_off = chm_xmin
-    row_off = chm_ymin
+    row_off = chm_ymax
     width = abs(chm_xmax - chm_xmin)
     height = abs(chm_ymax - chm_ymin)
 

@@ -24,4 +24,4 @@ SRS=$8
 docker build docker -t rasterio_bbox_docker && \
 docker run --rm -it -v $PWD:/work  -v $OUTPATH:/out -v $DATAPATH:/data -e USER=$USER -e HOME=/work -w /work rasterio_bbox_docker /data/$CHM /data/$DTM /data/$DSM /data/$EPT $BBOX $SRS
 
-#./start.sh /media/data/AOP/train /media/data/AOP data/chm.vrt data/dtm.vrt data/dsm.vrt entwine/ '([319360,319417],[4096006,4096052])' EPSG:26911
+#./start.sh /media/data/AOP/train /media/data/AOP data/chm.vrt data/dtm.vrt data/dsm.vrt entwine/ '([319864,319925],[4096389,4096442])' EPSG:26911
