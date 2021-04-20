@@ -4,11 +4,24 @@ from rasterio.vrt import WarpedVRT
 import argparse
 import os
 import affine
+import pdal
+from string import Template
+import json
+import subprocess
+
 
 
 def vrt_window_query(xmin, xmax, ymin, ymax, raster, outpath, tag=None):
-    '''Reads the extent - given by xmin, xmax, ymin, ymax - from a vrt and writes a GEOtiff to outpath. '''
-
+    '''Reads the extent - given by xmin, xmax, ymin, ymax - from a vrt and writes a GEOtiff to outpath.
+    The GEOtiff filename is constructed as f'{xmin}_{xmax}_{ymin}_{ymax}_{tag}.tif' where the tag (and
+    preceding underscore) is optional, see tag arg below.
+        -- xmin    - int or float - minimum x value of desired extent in the vrt crs values.
+        -- xmax    - int or float - maximum x value of desired extent in the vrt crs values.     
+        -- ymin    - int or float - minimum y value of desired extent in the vrt crs values.
+        -- ymax    - int or float - maximum y value of desired extent in the vrt crs values.
+        -- raster  - str - path to vrt file
+        -- outpath - str - path where tiles will be written
+        -- tag     - str - tag to be placed between the location tag and the file extension (optional)  '''
 
     # make a tag for the output file
     if tag:
@@ -59,7 +72,80 @@ def vrt_window_query(xmin, xmax, ymin, ymax, raster, outpath, tag=None):
     with rasterio.open(fname, 'w', **profile) as dst:
         dst.write(tile, 1)
 
+    
+    
 
+def ept_window_query(xmin, xmax, ymin, ymax, ept, srs, outpath, tag=None):
+    ''' '''
+
+    # make a tag for the output file
+    loc = f'{int(xmin)}_{int(xmax)}_{int(ymin)}_{int(ymax)}'
+    if tag:
+        f = f'{loc}_{tag}'
+    else:
+        f = f'{loc}'
+    of = os.path.join(outpath, f + '.las')
+
+
+    # make pipeline
+    bbox = ([xmin, xmax], [ymin, ymax])
+    pipeline = make_pipe(ept, bbox, outpath, srs)
+    with open(os.path.join(outpath, f'{f}.json'), 'w') as json_file:
+        json.dump(pipeline, json_file)
+    
+    #make pdal comand
+    cmd = f'pdal pipeline {pipeline}'
+    _ = subprocess.run(cmd, shell=True, capture_output=True)
+    print(f'\n\n\n{_.stdout}') 
+
+def make_pipe(ept, bbox, out_path, srs, threads=4, resolution=1):
+    '''Creates, validates and then returns the pdal pipeline
+    
+    Arguments:
+    ept        -- String -Path to ept file.
+    bbox       -- Tuple  - Bounding box in srs coordintes,
+                  in the form: ([xmin, xmax], [ymin, ymax]).
+    out_path   -- String - Path where the CHM shall be saved. Must include .tif exstension.
+    srs        -- String - EPSG identifier for srs  being used. Defaults to EPSG:3857
+                  because that is what ept files tend to use.
+    threads    -- Int    - Number os threads to be used by the reader.ept. Defaults to 4.
+    resolution -- Int or Float - resolution (m) used by writers.gdal
+    '''
+    
+    pipe = {
+        "pipeline": [
+            {
+            "bounds": bbox,
+            "filename": ept,
+            "type": "readers.ept",
+            "tag": "readdata",
+            "spatialreference": srs,
+            "threads": threads
+            },
+            {
+            "type":"filters.outlier",
+            "method":"radius",
+            "radius":1.0,
+            "min_k":4
+            },
+            {
+            "type":"filters.range",
+            "limits":"returnnumber[1:1]"
+            },
+            {
+            "type": "writers.las",
+            "filename": out_path,
+            "a_srs": srs
+            }
+        ]}
+    return(pipe) 
+    
+
+    #pipeline = pdal.Pipeline(pipe)
+    #if pipeline.validate():
+    #return(pipeline)
+    #else:
+    #    raise Exception('Bad pipeline (sorry to be so ambigous)!')
 
 
 
@@ -110,6 +196,7 @@ if __name__ == '__main__':
         vrt_window_query(xmin, xmax, ymin, ymax, args.dtm, args.out, tag='dtm')
 
         # TODO: make a laz for the window from ept.
+        ept_window_query(xmin, xmax, ymin, ymax, args.ept, args.srs, args.out, tag=None)
         
 
 
