@@ -72,79 +72,7 @@ def vrt_window_query(xmin, xmax, ymin, ymax, raster, outpath, tag=None):
     
     
 
-def ept_window_query(xmin, xmax, ymin, ymax, ept, srs, outpath, tag=None):
-    ''' '''
 
-    # make a tag for the output file
-    loc = f'{int(xmin)}_{int(xmax)}_{int(ymin)}_{int(ymax)}'
-    if tag:
-        f = f'{loc}_{tag}'
-    else:
-        f = f'{loc}'
-    of = os.path.join(outpath, f + '.las')
-
-
-    # make pipeline
-    bbox = ([xmin, xmax], [ymin, ymax])
-    pipeline = make_pipe(ept, bbox, outpath, srs)
-    json_file = os.path.join(outpath, f'{f}.json')
-    with open(json_file, 'w') as j:
-        json.dump(pipeline, j)
-    
-    #make pdal comand
-    cmd = f'pdal pipeline -i {json_file}'
-    _ = subprocess.run(cmd, shell=True, capture_output=True)
-    print(f'\n\n\n{_.stderr}') 
-
-def make_pipe(ept, bbox, out_path, srs, threads=4, resolution=1):
-    '''Creates, validates and then returns the pdal pipeline
-    
-    Arguments:
-    ept        -- String -Path to ept file.
-    bbox       -- Tuple  - Bounding box in srs coordintes,
-                  in the form: ([xmin, xmax], [ymin, ymax]).
-    out_path   -- String - Path where the CHM shall be saved. Must include .tif exstension.
-    srs        -- String - EPSG identifier for srs  being used. Defaults to EPSG:3857
-                  because that is what ept files tend to use.
-    threads    -- Int    - Number os threads to be used by the reader.ept. Defaults to 4.
-    resolution -- Int or Float - resolution (m) used by writers.gdal
-    '''
-    print(bbox)
-
-    pipe = {
-        "pipeline": [
-            {
-            "bounds": f'{bbox}',
-            "filename": ept,
-            "type": "readers.ept",
-            "tag": "readdata",
-            "spatialreference": srs,
-            "threads": threads
-            },
-            {
-            "type":"filters.outlier",
-            "method":"radius",
-            "radius":1.0,
-            "min_k":4
-            },
-            {
-            "type":"filters.range",
-            "limits":"returnnumber[1:1]"
-            },
-            {
-            "type": "writers.las",
-            "filename": out_path,
-            "a_srs": srs
-            }
-        ]}
-    return(pipe) 
-    
-
-    #pipeline = pdal.Pipeline(pipe)
-    #if pipeline.validate():
-    #return(pipeline)
-    #else:
-    #    raise Exception('Bad pipeline (sorry to be so ambigous)!')
 
 
 
@@ -160,7 +88,6 @@ if __name__ == '__main__':
     parser.add_argument('--chm', type=str, required=True, help='path to chm')
     parser.add_argument('--dtm', type=str, required=True, help='path to dtm')
     parser.add_argument('--dsm', type=str, required=True, help='path to dsm')
-    parser.add_argument('--ept', type=str, required=True, help='path to ept')
     parser.add_argument('--srs', type=str, required=True, help='EPSG code of srs of files, all files must be in the same coordinate system')
     parser.add_argument('--out', type=str, required=True, help='path to output directory')
     args = parser.parse_args()  
@@ -194,14 +121,7 @@ if __name__ == '__main__':
         vrt_window_query(xmin, xmax, ymin, ymax, args.dsm, args.out, tag='dsm')
         vrt_window_query(xmin, xmax, ymin, ymax, args.dtm, args.out, tag='dtm')
 
-        # TODO: make a laz for the window from ept.
-        ept_window_query(xmin, xmax, ymin, ymax, args.ept, args.srs, args.out, tag=None)
-        
-
-
-
-    
-    print('-------------------------------------------------------------------\nDone!')
+    print('-------------------------------------------------------------------\nDone reading vrts!')
 
 
     

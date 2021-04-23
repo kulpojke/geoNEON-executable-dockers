@@ -3,9 +3,9 @@
 CHM=$1
 DTM=$2
 DSM=$3
-EPT=$4
-BBOX=$5
-SRS=$6
+BBOX=$4
+SRS=$5
 echo "------------------------------------------------------------------------"
+echo $BBOX
 
-python app.py --bbox=$BBOX --chm=$CHM --dtm=$DTM --dsm=$DSM --ept=$EPT --srs=$SRS --out=/out
+python app_vrt.py --bbox=$BBOX --chm=$CHM --dtm=$DTM --dsm=$DSM --srs=$SRS --out=/out
