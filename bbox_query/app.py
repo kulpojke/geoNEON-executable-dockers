@@ -90,13 +90,14 @@ def ept_window_query(xmin, xmax, ymin, ymax, ept, srs, outpath, tag=None):
     # make pipeline
     bbox = ([xmin, xmax], [ymin, ymax])
     pipeline = make_pipe(ept, bbox, outpath, srs)
-    with open(os.path.join(outpath, f'{f}.json'), 'w') as json_file:
-        json.dump(pipeline, json_file)
+    json_file = os.path.join(outpath, f'{f}.json')
+    with open(json_file, 'w') as j:
+        json.dump(pipeline, j)
     
     #make pdal comand
-    cmd = f'pdal pipeline {pipeline}'
+    cmd = f'pdal pipeline -i {json_file}'
     _ = subprocess.run(cmd, shell=True, capture_output=True)
-    print(f'\n\n\n{_.stdout}') 
+    print(f'\n\n\n{_.stderr}') 
 
 def make_pipe(ept, bbox, out_path, srs, threads=4, resolution=1):
     '''Creates, validates and then returns the pdal pipeline
@@ -111,11 +112,12 @@ def make_pipe(ept, bbox, out_path, srs, threads=4, resolution=1):
     threads    -- Int    - Number os threads to be used by the reader.ept. Defaults to 4.
     resolution -- Int or Float - resolution (m) used by writers.gdal
     '''
-    
+    print(bbox)
+
     pipe = {
         "pipeline": [
             {
-            "bounds": bbox,
+            "bounds": f'{bbox}',
             "filename": ept,
             "type": "readers.ept",
             "tag": "readdata",
