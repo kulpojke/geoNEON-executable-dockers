@@ -4,9 +4,6 @@ from rasterio.vrt import WarpedVRT
 import argparse
 import os
 import affine
-import pdal
-from string import Template
-import json
 import subprocess
 
 
