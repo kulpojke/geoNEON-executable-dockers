@@ -1,9 +1,15 @@
-FROM pdal/alpine:2.0.1
+FROM pdal/ubuntubase:latest
 LABEL maintainer="michaelhuggins@protonmail.com"
 SHELL [ "/bin/bash", "--login", "-c" ]
 WORKDIR /
 
-RUN conda install rasterio==1.2.2  --channel conda-forge --channel anaconda
+# print version info
+RUN echo "---------------------------------------------------------" \
+&& cat /etc/*-release \
+&& echo "---------------------------------------------------------"
+
+# 
+
 
 COPY file.sh /
 RUN  chmod 777 file.sh

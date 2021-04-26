@@ -1,10 +1,10 @@
 import argparse
 import os
-import affine
-import pdal
+#import pdal
 from string import Template
 import json
 import subprocess
+from pprint import pprint
 
 
 
@@ -19,18 +19,17 @@ def ept_window_query(xmin, xmax, ymin, ymax, ept, srs, outpath, tag=None):
         f = f'{loc}'
     of = os.path.join(outpath, f + '.las')
 
-
     # make pipeline
     bbox = ([xmin, xmax], [ymin, ymax])
-    pipeline = make_pipe(ept, bbox, outpath, srs)
+    pipeline = make_pipe(ept, bbox, of, srs)
     json_file = os.path.join(outpath, f'{f}.json')
     with open(json_file, 'w') as j:
         json.dump(pipeline, j)
     
     #make pdal comand
-    cmd = f'pdal pipeline -i {json_file}'
+    cmd = f'pdal pipeline -i {json_file} --developer-debug'
     _ = subprocess.run(cmd, shell=True, capture_output=True)
-    print(f'\n\n\n{_.stderr}') 
+    print(f'stdout:\n{_.stdout}\n\n\nerrors:\n{_.stderr}') 
 
 def make_pipe(ept, bbox, out_path, srs, threads=4, resolution=1):
     '''Creates, validates and then returns the pdal pipeline
@@ -45,7 +44,6 @@ def make_pipe(ept, bbox, out_path, srs, threads=4, resolution=1):
     threads    -- Int    - Number os threads to be used by the reader.ept. Defaults to 4.
     resolution -- Int or Float - resolution (m) used by writers.gdal
     '''
-    print(bbox)
 
     pipe = {
         "pipeline": [
@@ -118,3 +116,6 @@ if __name__ == '__main__':
         xmax = float(xmax)
         ymin = float(ymin)
         ymax = float(ymax)
+
+        #make a laz for the window from ept.
+        ept_window_query(xmin, xmax, ymin, ymax, args.ept, args.srs, args.out, tag=None)
