@@ -22,8 +22,7 @@ def vrt_window_query(xmin, xmax, ymin, ymax, raster, outpath, tag=None):
 
     # make a tag for the output file
     if tag:
-        loc = f'{xmin}_{xmax}_{ymin}_{ymax}'
-        f = f'{loc}_{tag}.tif'
+        f = f'{tag}.tif'
     else:
         f = f'{xmin}_{xmax}_{ymin}_{ymax}.tif'
 
@@ -117,9 +116,11 @@ if __name__ == '__main__':
         ymax = float(ymax)
 
         # read and write the window for each raster
-        vrt_window_query(xmin, xmax, ymin, ymax, args.chm, args.out, tag='chm')
-        vrt_window_query(xmin, xmax, ymin, ymax, args.dsm, args.out, tag='dsm')
-        vrt_window_query(xmin, xmax, ymin, ymax, args.dtm, args.out, tag='dtm')
+        tag = f'{int(xmin)}_{int(xmax)}_{int(ymin)}_{int(ymax)}'
+
+        vrt_window_query(xmin, xmax, ymin, ymax, args.chm, args.out, tag=f'{tag}_chm')
+        vrt_window_query(xmin, xmax, ymin, ymax, args.dsm, args.out, tag=f'{tag}_dsm')
+        vrt_window_query(xmin, xmax, ymin, ymax, args.dtm, args.out, tag=f'{tag}_dtm')
 
     print('-------------------------------------------------------------------\nDone reading vrts!')
 

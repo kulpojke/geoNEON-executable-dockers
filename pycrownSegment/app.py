@@ -49,7 +49,7 @@ def filter_trees(PC, path, loc='top', exclude=False):
 
     
 
-def do_the_delineation(F_CHM, F_DTM, F_DSM, F_LAS, outpath=args.out, ws=3, ws_in_pixels=True)
+def do_the_delineation(F_CHM, F_DTM, F_DSM, F_LAS, outpath, ws=3, ws_in_pixels=True):
     PC = PyCrown(F_CHM, F_DTM, F_DSM, F_LAS, outpath=outpath)
 
     # Smooth CHM with median filter
@@ -115,6 +115,8 @@ def do_the_delineation(F_CHM, F_DTM, F_DSM, F_LAS, outpath=args.out, ws=3, ws_in
     print(f'Processing time: {TEND-TSTART} [HH:MM:SS]')
 
 
+def string_filter(s_list, regex):
+    return([re.findal(regex,s) for s in s_list])
 
 if __name__ == '__main__':
     
@@ -141,10 +143,11 @@ if __name__ == '__main__':
         lazs = glob('*.laz')
 
         # match up the tiles using the args.prfx (which is a pattern)
-        A = set(re.findall(r'\d{4,9}_\d{4,9}', chms))
-        B = set(re.findall(r'\d{4,9}_\d{4,9}', dsms))
-        C = set(re.findall(r'\d{4,9}_\d{4,9}', dtms))
-        laz_tiles = set(re.findall(r'\d{4,9}_\d{4,9}', lazs))
+        prfx = r'\d{4,9}_\d{4,9}'
+        A = set(string_filter(chms, prfx))
+        B = set(string_filter(dsms, prfx))
+        C = set(string_filter(dtms, prfx))
+        laz_tiles = set(string_filter(lazs, prfx))
         common = A & B & C
         not_common = (A ^ B) ^ (B ^ C)
 
@@ -156,3 +159,4 @@ if __name__ == '__main__':
 
     print(f'common: {common}\nnot:{not_common}')
     #print(f'do_the_delineation({F_CHM}, {F_DTM}, {F_DSM}, {F_LAS}')
+
