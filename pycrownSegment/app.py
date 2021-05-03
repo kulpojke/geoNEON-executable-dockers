@@ -116,7 +116,7 @@ def do_the_delineation(F_CHM, F_DTM, F_DSM, F_LAS, outpath, ws=3, ws_in_pixels=T
 
 
 def string_filter(s_list, regex):
-    return([re.findal(regex,s) for s in s_list])
+    return([re.findall(r'{regex}',s) for s in s_list])
 
 if __name__ == '__main__':
     
@@ -137,26 +137,31 @@ if __name__ == '__main__':
     datapath = args.dir
 
     if datapath:
-        chms = glob('*_CHM.tif')
-        dsms = glob('*_DSM.tif')
-        dtms = glob('*_DTM.tif')
-        lazs = glob('*.laz')
+        chms = glob(f'{datapath}/*_chm.tif')
+        dsms = glob(f'{datapath}/*_dsm.tif')
+        dtms = glob(f'{datapath}/*_dtm.tif')
+        lazs = glob(f'{datapath}/*.laz')
+
+        prfx = r'\d{4,9}_\d{4,9}_\d{4,9}_\d{4,9}'
+        tiles = [re.findall(prfx, s) for s in chms]
 
         # match up the tiles using the args.prfx (which is a pattern)
-        prfx = r'\d{4,9}_\d{4,9}'
+        '''
+        print(string_filter(chms, prfx))
         A = set(string_filter(chms, prfx))
         B = set(string_filter(dsms, prfx))
         C = set(string_filter(dtms, prfx))
         laz_tiles = set(string_filter(lazs, prfx))
         common = A & B & C
         not_common = (A ^ B) ^ (B ^ C)
-
+        '''
     else:
         F_CHM = args.chm
         F_DTM = args.dtm
         F_DSM = args.dsm
         F_LAS = args.points
 
-    print(f'common: {common}\nnot:{not_common}')
+    print(tiles)
+    # print(f'{chms}\ncommon: {common}\nnot:{not_common}')
     #print(f'do_the_delineation({F_CHM}, {F_DTM}, {F_DSM}, {F_LAS}')
 
