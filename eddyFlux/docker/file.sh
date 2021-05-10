@@ -1,0 +1,11 @@
+#!/bin/sh
+
+DPID=$1
+PACKAGE=$2 
+SITE=$3
+STARTDATE=$4
+ENDDATE=$5
+
+# run the app
+Rscript app.R  $DPID $PACKAGE $SITE $STARTDATE $ENDDATE
+
