@@ -42,7 +42,7 @@ chm <- grid_canopy(ctg_norm, 1, p2r(0.15))
 # find tree tops
 # first define function for window sizing (TODO: didle with this, it could
 #actually be pretty important to tweak)
-f <- function(x) {x * 0.8}
+f <- function(x) { x * 0.07 + 3}
 writeLines("-----------------------finding tree tops-----------------------\n")
 opt_output_files(ctg_norm) <- ""
 ttops <- find_trees(ctg_norm, lmf(f), uniqueness = "bitmerge")
@@ -51,6 +51,7 @@ writeOGR(obj=ttops, layer="ttops", dsn=outpath, driver="ESRI Shapefile")
 # segment trees
 writeLines("-----------------------segmenting trees------------------------\n")
 opt_output_files(ctg_norm) <- paste0(outpath, "/{*}_segmented")
-#algo <- dalponte2016(chm, ttops)
-ctg_segmented <- segment_trees(ctg_norm, silva2016(chm, ttops))
+algo <- dalponte2016(chm, ttops)
+#algo = silva2016(chm, ttops)
+ctg_segmented <- segment_trees(ctg_norm, algo)
 crowns <- delineate_crowns(ctg_segmented, func=.stdmetrics)
