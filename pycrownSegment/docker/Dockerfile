@@ -3,7 +3,7 @@ LABEL maintainer="michaelhuggins@protonmail.com"
 SHELL [ "/bin/bash", "--login", "-c" ]
 WORKDIR /
 
-# Create pycrown env
+# apt stuff
 RUN apt-get update && apt install -y software-properties-common \
 && apt-get install -y apt-utils 
 

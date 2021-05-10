@@ -5,7 +5,6 @@ while getopts ":h" option; do
       h) # display Help
         echo "SYNOPSIS"  
         echo "     start.sh [site] [datapath]"
-        echo "        -- site is a NEON site abbreviation e.g. BART"
         echo "        -- datapath is the path where CHM, DSM, DTM and laz"
         echo "           are stored"
         echo "        -- prefix - prefix to determine which files in datapath"
@@ -29,15 +28,9 @@ echo "Copyright: 2018, Jan Zörner"
 echo "Licence: GNU GPLv3"
 
 
-PRODUCTCODE=$1
-SITE=$2
-
-if [ "$SHOWDATES" = true ] ; then
-   docker build docker -t hyper_docker && \
-   docker run --rm -it -v $PWD:/data -e USER=$USER -e HOME=/data -w /data  hyper_docker s
-fi
-
 DATAPATH=$1
 
 docker build docker -t pycrown_docker && \
 docker run --rm -it -v $PWD:/data -v $DATAPATH:/data2 -e USER=$USER -e HOME=/data -w /data  pycrown_docker 
+
+# ./start.sh 
