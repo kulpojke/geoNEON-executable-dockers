@@ -8,3 +8,4 @@ RUN  apt-get update \
 
 RUN R -e "install.packages('BiocManager'); install.packages('devtools'); devtools::install_version('neonUtilities', '2.0.1'); BiocManager::install('rhdf5')"
 
+RUN R -e "install.packages('doParallel')"
