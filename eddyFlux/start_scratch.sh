@@ -21,4 +21,4 @@ ENDDATE=$4
 docker build docker_scratch -t eddyr_docker_scratch && \
 docker run --rm -it -v $PWD:/data -v $SAVEPATH:/savepath -e USER=$USER -e HOME=/data -w /data eddyr_docker_scratch
 
-# ./start_scratch.sh /media/data/AOP/eddy 
+# ./start_scratch.sh /data/mthuggin/eddy

@@ -33,7 +33,14 @@ filepath <- file.path(savepath, 'filesToStack00200')
 flux <- stackEddy(filepath=filepath,
                   level="dp04")
 
-# porudct IDs for soil CO2, Water, and Temp
+# extract the columns of interest from the flux data
+flx <- flux[[1]]
+flx <- flx %>% select(timeBgn, data.fluxCo2.nsae.flux, qfqm.fluxCo2.nsae.qfFinl, data.
+fluxTemp.nsae.flux,  qfqm.fluxTemp.nsae.qfFinl, data.fluxH2o.nsae.flux, qfqm.fluxH2o.nsae
+.qfFinl)
+setDT(flx)
+
+# product IDs for soil CO2, Water, and Temp
 soilCO2ID <- 'DP1.00095.001'
 soilH2OID <- 'DP1.00094.001'
 soilTID   <- 'DP1.00041.001'
@@ -55,9 +62,22 @@ soilT <- loadByProduct(soilTID, site=site,
                     check.size=F, nCores=ncores)
 
 # join the data for soilT (R is so painful, this would be so much easier in python)
-positions <- unique(soilT$ST_30_minute[c("verticalPosition")])[[1]]
 
-flx <- flux[[1]]
+
+df <- soilCO2$SCO2C_30_minute
+# get the positions
+positions <- unique(df[c("verticalPosition")])[[1]]
+# make an empty list
+soilCO2_dfs <-  c()
+# put crap in the list
+for (position in positions) {
+    print(position)
+    d <- df["verticalPosition" == position]
+    d$timeBgn <- d$startDateTime
+    soilCO2_dfs <- c(soilCO2_dfs, setNames(list(d), paste0('d',position)))
+}
+
+
 
 library(doParallel)
 
