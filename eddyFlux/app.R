@@ -143,42 +143,15 @@ merge_dfs_list <- function(list_of_dfs) {
         loc <- names(list_of_dfs)[[i]]
         df <- list_of_dfs[[i]]
         if (i==1) {
-            print('i==1')
-            meta_names <- rename_by_loc(df, loc)
-            df <- df %>% rename(!!!meta_names)
-            print('names set for i==1')
+            df <- df %>% rename_with(~ paste(.x, loc, sep="_"), -timeBgn)
             data <- df
         } else {
-            print('else')
-            meta_names <- rename_by_loc(df, loc)
-            df <- df %>% rename(!!!meta_names)
+            df <- df %>% rename_with(~ paste(.x, loc, sep="_"), -timeBgn)
             data <- inner_join(data, df, by="timeBgn")
         }
     } 
     return(data)
 }
-
-
-rename_by_loc <- function(df, loc) {
-    #' concatenates the sensor loc to the column name.
-    #' This function is used by merge_dfs_list()
-
-    old_names <- names(df)
-    new_names <- c()
-    for (name in old_names) {
-        if (name != "timeBgn") {
-            new_name <- paste(name, loc, sep="_")
-            meta_name <- c(name = new_name) 
-            new_names <- c(new_names, paste(name, paste(name, loc, sep="_"), sep = " = ") )
-        }
-    }
-    return(new_names)
-}
-
-
-
-
-
 
 
 
