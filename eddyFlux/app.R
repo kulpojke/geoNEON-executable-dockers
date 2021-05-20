@@ -18,6 +18,7 @@ library(parallel)
 ncores <- detectCores()
 library(dplyr)
 library(neonUtilities)
+library(doParallel)
 
 # product IDs for soil CO2, Water, and Temp
 soilCO2ID <- 'DP1.00095.001'
@@ -75,70 +76,11 @@ sep_horizontal <- function(list_of_dfs) {
     return(df_list)
 }
 
-# --------end of function definitions --------------------------------------
-
-#-------------- flux -------------------------
-# bag the data from the API
-zipsByProduct(dpID=dpID, package=package, 
-              site=site, 
-              startdate=startdate, enddate=enddate,
-              savepath=savepath, 
-              check.size=F)
-
-# extract the level 4 data
-filepath <- file.path(savepath, 'filesToStack00200')
-flux <- stackEddy(filepath=filepath,
-                  level="dp04")
-
-# get just the dataframe
-flx <- flux[[1]]
-# cast it to a data.table type
-setDT(flx)
-# extract the columns of interest from the flux data
-flx <- flx %>% select(timeBgn, data.fluxCo2.nsae.flux, qfqm.fluxCo2.nsae.qfFinl, data.fluxTemp.nsae.flux,  qfqm.fluxTemp.nsae.qfFinl, data.fluxH2o.nsae.flux, qfqm.fluxH2o.nsae.qfFinl)
-
-#------------ soilCO2 ------------------------
-# download the soilCO2 product
-soilCO2 <- loadByProduct(soilCO2ID, site=site, 
-                    timeIndex=30, package="basic", 
-                    startdate=startdate, enddate=enddate,
-                    check.size=F, nCores=ncores)
-
-# seperate data by verticalPosition for soilCO2
-soilCO2_dfs <- sep_vertical(soilCO2)
-
-# seperate soilCO2 by horizontalPosition  
-soilCO2_dfs <- sep_horizontal(soilCO2_dfs)
-
-#------------ soilH2O ------------------------
-# download the soilH2O product
-soilH2O <- loadByProduct(soilH2OID, site=site, 
-                    timeIndex=30, package="basic", 
-                    startdate=startdate, enddate=enddate,
-                    check.size=F, nCores=ncores)
-
-# seperate data by verticalPosition for soilH2O 
-soilH2O_dfs <- sep_vertical(soilH2O)
-
-# seperate soilH2O by horizontalPosition  
-soilH2O_dfs <- sep_horizontal(soilH2O_dfs)
-
-#------------- soilT -------------------------
-# download the soilT product
-soilT <- loadByProduct(soilTID, site=site, 
-                    timeIndex=30, package="basic", 
-                    startdate=startdate, enddate=enddate,
-                    check.size=F, nCores=ncores)
-
-# seperate data by verticalPosition for soilT
-soilT_dfs <- sep_vertical(soilT)
-
-# seperate soilT by horizontalPosition  
-soilT_dfs <- sep_horizontal(soilT_dfs)
-
-#------------- merge -------------------------
 
 merge_dfs_list <- function(list_of_dfs) {
+    #' Function to merge a list of dfs. Tags column names with sensor
+    #' position taken from names(list_of_dfs). 
+    #' @param list_of_dfs -- the list of dfs
     for (i in 1:length(list_of_dfs)) {
         loc <- names(list_of_dfs)[[i]]
         df <- list_of_dfs[[i]]
@@ -153,33 +95,133 @@ merge_dfs_list <- function(list_of_dfs) {
     return(data)
 }
 
+# --------end of function definitions --------------------------------------
+
+#-------------- flux -------------------------
+# bag the eddy flux data from the API
+zipsByProduct(dpID=dpID, package=package, 
+              site=site, 
+              startdate=startdate, enddate=enddate,
+              savepath=savepath, 
+              check.size=F)
+
+# extract the level 4 data
+filepath <- file.path(savepath, 'filesToStack00200')
+flux <- stackEddy(filepath=filepath,
+                  level="dp04")
+
+# get just the dataframe
+flux <- flux[[1]]
+# cast it to a data.table type
+setDT(flux)
+# extract the columns of interest from the flux data
+flux <- flux %>% select(timeBgn, data.fluxCo2.nsae.flux, qfqm.fluxCo2.nsae.qfFinl, data.fluxTemp.nsae.flux,  qfqm.fluxTemp.nsae.qfFinl, data.fluxH2o.nsae.flux, qfqm.fluxH2o.nsae.qfFinl)
+
+# garbage collect, just in case
+gc()
+
+#------------ soilCO2 ------------------------
+# download the soilCO2 product
+soilCO2 <- loadByProduct(soilCO2ID, site=site, 
+                    timeIndex=30, package="basic", 
+                    startdate=startdate, enddate=enddate,
+                    check.size=F, nCores=ncores)
+
+# seperate data by verticalPosition for soilCO2
+soilCO2 <- sep_vertical(soilCO2)
+
+# seperate soilCO2 by horizontalPosition  
+soilCO2 <- sep_horizontal(soilCO2)
+
+# garbage collect, just in case
+gc()
+
+#------------ soilH2O ------------------------
+# download the soilH2O product
+soilH2O <- loadByProduct(soilH2OID, site=site, 
+                    timeIndex=30, package="basic", 
+                    startdate=startdate, enddate=enddate,
+                    check.size=F, nCores=ncores)
+
+# seperate data by verticalPosition for soilH2O 
+soilH2O <- sep_vertical(soilH2O)
+
+# seperate soilH2O by horizontalPosition  
+soilH2O <- sep_horizontal(soilH2O)
+
+# garbage collect, just in case
+gc()
+
+#------------- soilT -------------------------
+# download the soilT product
+soilT <- loadByProduct(soilTID, site=site, 
+                    timeIndex=30, package="basic", 
+                    startdate=startdate, enddate=enddate,
+                    check.size=F, nCores=ncores)
+
+# seperate data by verticalPosition for soilT
+soilT <- sep_vertical(soilT)
+
+# seperate soilT by horizontalPosition  
+soilT <- sep_horizontal(soilT)
+
+# garbage collect, just in case
+gc()
+
+#------------- merge -------------------------
+# merge each list of dfs containing data from different sensor types
+soilCO2 <- merge_dfs_list(soilCO2)
+soilH2O <- merge_dfs_list(soilH2O)
+soilT   <- merge_dfs_list(soilT)
+
+# merge them all into a big soil df
+soil <- soilCO2 %>% 
+    inner_join(soilH2O, by='timeBgn') %>%
+    inner_join(soilT, by='timeBgn')
+
+# remove unused stuff to free memory
+rm(soilCO2)
+rm(soilH2O)
+rm(soilT)
+gc()
+
+# merge soil with the flux data
+data <- flux %>% inner_join(soil, by='timeBgn')
 
 
 
 
 
+# -----------------vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv----------
+# put the sensor df lists into a list
+df_list_list <- c(soilCO2, soilH2O, soilT)
 
-
-
-
-
-
-
-library(doParallel)
-
-# define a function for merging columns computed in ||
-merge_columns <- function(a, b) {
-    merge(a, b, by='timeBgn')
+# create the merging function for .combine
+merge_by_timeBgn <- function(a, b) {
+    inner_join(a, b, by='timeBgn')
 }
 
-# define a (very boilerplate) function for getting the data within the loop
-scrape_data <- function(pos, soilT) {
-    col <- paste0('ST_', pos)
-    values <- soilT$ST_30_minute[which(soilT$ST_30_minute$verticalPosition==pos),c("startDateTime", "horizontalPosition", "soilTempMean","soilTempMinimum", "soilTempExpUncert", "soilTempStdErMean", "finalQF", "soilTempMaximum", "soilTempVariance")]
-    values$timeBgn <- values$startDateTime
+# create cluster
+cl <- makeCluster(ncores)
+registerDoParallel(cl)
+
+# merge each df list in df_list_list in || then merge results into 1 huge df
+results <- foreach(i=1:(length(df_list_list)-1),
+                        .combine=merge_by_timeBgn,
+                        .packages='dplyr') %dopar% {
+    merge_dfs_list(df_list_list[[i]])
 }
 
-p = length(positions)
+# unregister cluster
+stopCluster(cl)
+
+# garbage collect, just in case
+gc()
+
+
+x <- merge_dfs_list(soilCO2)
+
+# -----------------vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv----------
 
 
 foreach(i=1:p, .combine=merge_columns) %dopar% {
