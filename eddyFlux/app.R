@@ -8,7 +8,9 @@ package   <- args[2]
 site      <- args[3]
 startdate <- args[4]
 enddate   <- args[5]
+outfile   <- args[6]    # name of h5 file , e.g. 'sinead_oconnor.h5'
 savepath  <- '/savepath'
+
 
 # do this wierd R thing
 options(stringsAsFactors=F)
@@ -46,7 +48,14 @@ sep_vertical <- function(sensor_data) {
         # change timestamps to timeBgn to harmonize with flux data
         d$timeBgn <- d$startDateTime
         # drop some unneeded columns
-        d <- select(d,-startDateTime, -endDateTime, -domainID, -verticalPosition, -release, -publicationDate, -siteID)
+        d <- select(d,
+                    -startDateTime,
+                    -endDateTime,
+                    -domainID,
+                    -verticalPosition,
+                    -release,
+                    -publicationDate,
+                    -siteID)
         # concat to list
         df_list <- c(df_list, setNames(list(d), paste0("z", position)))
     }
@@ -115,7 +124,13 @@ flux <- flux[[1]]
 # cast it to a data.table type
 setDT(flux)
 # extract the columns of interest from the flux data
-flux <- flux %>% select(timeBgn, data.fluxCo2.nsae.flux, qfqm.fluxCo2.nsae.qfFinl, data.fluxTemp.nsae.flux,  qfqm.fluxTemp.nsae.qfFinl, data.fluxH2o.nsae.flux, qfqm.fluxH2o.nsae.qfFinl)
+flux <- flux %>% select(timeBgn,
+                        data.fluxCo2.nsae.flux,
+                        qfqm.fluxCo2.nsae.qfFinl,
+                        data.fluxTemp.nsae.flux, 
+                        qfqm.fluxTemp.nsae.qfFinl,
+                        data.fluxH2o.nsae.flux,
+                        qfqm.fluxH2o.nsae.qfFinl)
 
 # garbage collect, just in case
 gc()
@@ -188,51 +203,66 @@ gc()
 # merge soil with the flux data
 data <- flux %>% inner_join(soil, by='timeBgn')
 
+#------------- write to h5 -------------------
+
+# create h5 file
+outpath <- paste(savepath, outfile, sep = "/")
+h5createFile(outpath)
+
+# create a group named for the site within the H5 file 
+h5createGroup(outpath, site)
+
+# write data to the group
+h5write(data, file = outpath, name = "data")
 
 
 
 
-# -----------------vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv----------
-# put the sensor df lists into a list
-df_list_list <- c(soilCO2, soilH2O, soilT)
-
-# create the merging function for .combine
-merge_by_timeBgn <- function(a, b) {
-    inner_join(a, b, by='timeBgn')
-}
-
-# create cluster
-cl <- makeCluster(ncores)
-registerDoParallel(cl)
-
-# merge each df list in df_list_list in || then merge results into 1 huge df
-results <- foreach(i=1:(length(df_list_list)-1),
-                        .combine=merge_by_timeBgn,
-                        .packages='dplyr') %dopar% {
-    merge_dfs_list(df_list_list[[i]])
-}
-
-# unregister cluster
-stopCluster(cl)
-
-# garbage collect, just in case
-gc()
 
 
-x <- merge_dfs_list(soilCO2)
-
-# -----------------vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv----------
 
 
-foreach(i=1:p, .combine=merge_columns) %dopar% {
+## -----------------vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv----------
+## put the sensor df lists into a list
+#df_list_list <- c(soilCO2, soilH2O, soilT)
+
+## create the merging function for .combine
+#merge_by_timeBgn <- function(a, b) {
+#    inner_join(a, b, by='timeBgn')
+#}
+
+## create cluster
+#cl <- makeCluster(ncores)
+#registerDoParallel(cl)
+
+## merge each df list in df_list_list in || then merge results into 1 huge df
+#results <- foreach(i=1:(length(df_list_list)-1),
+#                        .combine=merge_by_timeBgn,
+#                        .packages='dplyr') %dopar% {
+#    merge_dfs_list(df_list_list[[i]])
+#}
+#
+## unregister cluster
+#stopCluster(cl)
+#
+## garbage collect, just in case
+#gc()
 
 
-results = foreach()
+#x <- merge_dfs_list(soilCO2)
 
-for (pos in positions) {
-    col <- paste0('ST_', pos)
-    values <- soilT$ST_30_minute[which(soilT$ST_30_minute$verticalPosition==pos),c("startDateTime", "horizontalPosition", "soilTempMean","soilTempMinimum", "soilTempExpUncert", "soilTempStdErMean", "finalQF", "soilTempMaximum", "soilTempVariance")]
-    values$timeBgn <- values$startDateTime
-    
-}
+## -----------------vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv----------
+
+
+#foreach(i=1:p, .combine=merge_columns) %dopar% {
+#
+#
+#results = foreach()
+#
+#for (pos in positions) {
+#    col <- paste0('ST_', pos)
+#    values <- soilT$ST_30_minute[which(soilT$ST_30_minute$verticalPosition==pos),c("startDateTime", "horizontalPosition", "soilTempMean","soilTempMinimum", "soilTempExpUncert",# "soilTempStdErMean", "finalQF", "soilTempMaximum", "soilTempVariance")]
+ #   values$timeBgn <- values$startDateTime
+#    
+#}
 
