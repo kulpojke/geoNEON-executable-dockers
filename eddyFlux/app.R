@@ -8,7 +8,6 @@ package   <- args[2]
 site      <- args[3]
 startdate <- args[4]
 enddate   <- args[5]
-outfile   <- args[6]    # name of h5 file , e.g. 'sinead_oconnor.h5'
 savepath  <- '/savepath'
 
 
@@ -121,8 +120,7 @@ flux <- stackEddy(filepath=filepath,
 
 # get just the dataframe
 flux <- flux[[1]]
-# cast it to a data.table type
-setDT(flux)
+
 # extract the columns of interest from the flux data
 flux <- flux %>% select(timeBgn,
                         data.fluxCo2.nsae.flux,
@@ -204,16 +202,17 @@ gc()
 data <- flux %>% inner_join(soil, by='timeBgn')
 
 #------------- write to h5 -------------------
+library(rhdf5)
 
 # create h5 file
-outpath <- paste(savepath, outfile, sep = "/")
+outpath <- paste(savepath, paste0(site, '.h5'), sep = "/")
 h5createFile(outpath)
 
 # create a group named for the site within the H5 file 
 h5createGroup(outpath, site)
 
 # write data to the group
-h5write(data, file = outpath, name = "data")
+h5write(data, file = outpath, name = paste(site, "data", sep = "/")
 
 
 
