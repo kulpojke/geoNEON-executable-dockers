@@ -201,24 +201,32 @@ gc()
 # merge soil with the flux data
 data <- flux %>% inner_join(soil, by='timeBgn')
 
+# make a filename
+fname <- paste(savepath, paste0(site, '_', startdate, '.csv'), sep = "/")
+
+# write to csv
+write.csv(data, fname)
+pstr <- paste0('data written to ', fname)
+
+
+
+
+## -----------------vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv----------
+
 #------------- write to h5 -------------------
-library(rhdf5)
+# Screw this. too hard in R keeps failing
+
+#library(rhdf5)
 
 # create h5 file
-outpath <- paste(savepath, paste0(site, '.h5'), sep = "/")
-h5createFile(outpath)
+#outpath <- paste(savepath, paste0(site, '.h5'), sep = "/")
+#h5createFile(outpath)
 
 # create a group named for the site within the H5 file 
-h5createGroup(outpath, site)
+#h5createGroup(outpath, site)
 
 # write data to the group
-h5write(data, file = outpath, name = paste(site, "data", sep = "/")
-
-
-
-
-
-
+#h5write(data, file = outpath, name = paste(site, "data", sep = "/")
 
 
 ## -----------------vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv----------
