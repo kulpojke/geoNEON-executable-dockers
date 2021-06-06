@@ -25,6 +25,7 @@ library(doParallel)
 soilCO2ID <- 'DP1.00095.001'
 soilH2OID <- 'DP1.00094.001'
 soilTID   <- 'DP1.00041.001'
+precipID  <- 'DP1.00006.001'
 
 
 # -------------- function definitions --------------------------------------
@@ -82,6 +83,46 @@ sep_horizontal <- function(list_of_dfs) {
         }
     }
     return(df_list)
+}
+
+
+precip_prune <- function(precip_data) {
+    #' function to select only the desired columns from the precip table
+
+    # find the index of the 30_minute data, prefer SECPRE but fall back 
+    # to PRIPRE (bc KNOWN ISSUE 2020-06-10). keep track of which with pri_sec
+    idx <- which(grepl('SECPRE_30min', names(precip_data)), arr.ind=TRUE)
+    pri_sec <- 2
+    if (length(idx) != 1) {
+        idx <- which(grepl('PRIPRE_30min', names(precip_data)), arr.ind=TRUE)
+        pri_sec <- 1
+    }
+
+    # now get the data using the index
+    df <- precip_data[[idx]]
+    print(class(df))
+    # douple check to makes ure we are only dealing with one guage (is this true at all sites?)
+    if (unique(df["verticalPosition"]) > 1){
+        print(paste0('Warning there is ore than one verital position for sensors at ', site))
+    }
+    if (unique(df["horizontalPosition"]) > 1){
+        print(paste0('Warning there is ore than one verital position for sensors at ', site))
+    }
+
+    # neaten the df before returnng it
+    if (pri_sec ==2){
+        # select the desired rows
+        df <- df %>% select(startDateTime, secPrecipBulk, secPrecipExpUncert, secPrecipRangeQF, secPrecipSciRvwQF)
+    } else {
+        # select the desired rows
+        df <- df %>% select(startDateTime, priPrecipBulk, priPrecipExpUncert, priPrecipRangeQF, priPrecipSciRvwQF)
+    }
+
+    # change startDateTime to timeBgn for consistency with flux
+    df$timeBgn <- df$startDateTime
+    df <- select(df, -startDateTime)
+
+    return(df)
 }
 
 
@@ -181,6 +222,16 @@ soilT <- sep_horizontal(soilT)
 # garbage collect, just in case
 gc()
 
+#------------- precip ------------------------
+# download the precip product
+precip <- loadByProduct(precipID, site=site, 
+                    timeIndex=30, package="basic", 
+                    startdate=startdate, enddate=enddate,
+                    check.size=F, nCores=ncores)
+
+# select the needed columns
+precip <- precip_prune(precip)                 
+
 #------------- merge -------------------------
 # merge each list of dfs containing data from different sensor types
 soilCO2 <- merge_dfs_list(soilCO2)
@@ -200,15 +251,17 @@ gc()
 
 # merge soil with the flux data
 data <- flux %>% inner_join(soil, by='timeBgn')
+# merge precip with the soil and flux data
+data <- data %>% inner_join(precip, by='timeBgn')
 
 # make a filename
 fname <- paste(savepath, paste0(site, '_', startdate, '.csv'), sep = "/")
 
 # write to csv
 write.csv(data, fname)
-pstr <- paste0('data written to ', fname)
 
-
+# print a nice little message so the user knows something happened
+print(paste0('Data written to ', fname))
 
 
 ## -----------------vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv----------

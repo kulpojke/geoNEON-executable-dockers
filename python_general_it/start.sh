@@ -16,7 +16,7 @@ docker run --rm -it  -v $WORKDIR:/work -v $DATAPATH:/data -e USER=$USER -e HOME=
 # ssh mthuggin@elcapitan.csc.calpoly.edu
 #
 # Now on the server, got the proper directory and: 
-# docker run --rm -it -p 8887:8888 -v /data/mthuggin/tmp:/work -v /data/mthuggin/eddy:/data  --name py_data_science jupyter/datascience-notebook:ubuntu-20.04 bash
+# docker run --rm -it -p 8887:8888 -v /data/mthuggin/tmp:/work -v /data/mthuggin/eddy:/data  py_general_docker:latest bash
 #
 # Now in the container:
 # jupyter lab --no-browser --port 8888
@@ -30,3 +30,20 @@ docker run --rm -it  -v $WORKDIR:/work -v $DATAPATH:/data -e USER=$USER -e HOME=
 # 
 # it will ook like it has hung, but it is working.
 # go to localhost:1234 in browser, use the token from above to log in.
+
+
+
+
+# TENSORFLOW JUPYTER NOTEBOOK --------------------------------------------------------------------------
+# ssh mthuggin@elcapitan.csc.calpoly.edu
+#
+# Now on the server,
+# docker run -it --rm --runtime=nvidia -u $(id -u):$(id -g) -v /data/mthuggin/eddy:/data -v $(realpath /data/mthuggin/notebooks):/tf/notebooks -p 8885:8888 tensorflow/tensorflow:2.5.0-gpu-jupyter
+#
+# then in new terminal
+# ssh -NL localhost:1234:localhost:8885  mthuggin@elcapitan.csc.calpoly.edu
+# 
+# it will look like it has hung, but it is working.
+# go to localhost:1234 in browser, use the token from above to log in.
+
+#  

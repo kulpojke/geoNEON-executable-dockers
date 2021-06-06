@@ -1,8 +1,7 @@
 FROM jupyter/datascience-notebook:ubuntu-20.04
 
 # lets add apackage with conda so that this image will take hundreds of years to build
-RUN conda install --yes -c conda-forge pymc3
-
+RUN conda install --yes -c conda-forge -c anaconda pymc3==3.8 mkl-service arviz==0.11.0
 
 
 
