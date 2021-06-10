@@ -15,7 +15,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--datapath', type=str, required=True,
                         help='Path to files to be merged')
-    parser.add_argument('--outpath', type=str, required=True, help='Path where mosaics will be written')
     args = parser.parse_args()  
 
     # glob the files
