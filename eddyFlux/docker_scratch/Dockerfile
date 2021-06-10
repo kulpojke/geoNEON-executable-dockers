@@ -1,4 +1,4 @@
-FROM rocker/r-base:4.1.0
+FROM rocker/rstudio:4.1.0
 
 RUN apt-get update && apt install -y software-properties-common \
 && apt-get install -y apt-utils 
