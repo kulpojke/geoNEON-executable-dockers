@@ -1,3 +1,5 @@
+#!/bin/sh
+
 while getopts ":h" option; do
    case $option in
       h) # display Help
