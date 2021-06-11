@@ -7,6 +7,6 @@ STARTDATE=$4
 ENDDATE=$5
 
 # run the app
-Rscript app.R  $DPID $PACKAGE $SITE $STARTDATE $ENDDATE
+Rscript fluxdownload.R  $DPID $PACKAGE $SITE $STARTDATE $ENDDATE
 
 chmod -R 766 /savepath
