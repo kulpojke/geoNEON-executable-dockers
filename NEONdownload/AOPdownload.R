@@ -24,6 +24,7 @@ options(stringsAsFactors=F)
 
 # check for token
 if (class(api_token) != "character"){
+  print('No API Token.  For faster Download get a dang token!')
   api_token <- NA
 }
 # download files

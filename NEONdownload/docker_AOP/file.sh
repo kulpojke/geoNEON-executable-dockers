@@ -8,7 +8,6 @@ NORTHING=$5
 BUFFER=$6
 TOKEN=$7
 
-
 # run the app
 Rscript AOPdownload.R  $DPID $SITE $YEAR $EASTING $NORTHING $BUFFER $TOKEN
 

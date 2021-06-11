@@ -17,12 +17,16 @@ YEAR=$3
 EASTING=$4
 NORTHING=$5
 BUFFER=$6
-TOKEN=$7
-SAVEPATH=$8
+SAVEPATH=$7
+TOKEN=$8
+
+echo $DPID
+echo $SAVEPATH
+echo $SITE
 
 docker build docker_base -t base_docker && \
 docker build docker_AOP -t aop_docker && \
 docker run --rm -it -v $PWD:/data -v $SAVEPATH:/savepath --user $(id -u):$(id -g) -e HOME=/data -w /data aop_docker $DPID $SITE $YEAR $EASTING $NORTHING $BUFFER $TOKEN
 
 
-# ./AOP_start.sh DP3.30010.001 TEAK 2019 321516 4097400 10 $TOKEN /data/mthuggin/eddy2
+# ./AOP_start.sh DP3.30010.001 TEAK 2019 321516 4097400 10 /data/mthuggin/eddy2 $TOKEN 
