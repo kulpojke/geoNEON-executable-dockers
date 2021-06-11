@@ -6,9 +6,9 @@ args = commandArgs(trailingOnly=TRUE)
 dpID      <- args[1] 
 site      <- args[2] 
 year      <- args[3] 
-easting   <- args[4]
-northing  <- args[5] 
-buffer    <- args[6] 
+easting   <- as.numeric(args[4])
+northing  <- as.numeric(args[5]) 
+buffer    <- as.numeric(args[6]) 
 api_token <- args[7]
 savepath  <-'/savepath'
 
@@ -22,10 +22,11 @@ ncores <- detectCores()
 # do this wierd R thing
 options(stringsAsFactors=F)
 
+# check for token
 if (class(api_token) != "character"){
   api_token <- NA
 }
-
+# download files
 byTileAOP(dpID=dpID,
           site=site,
           year=year,

@@ -16,13 +16,13 @@ docker run --rm -it  -v $WORKDIR:/work -v $DATAPATH:/data -e USER=$USER -e HOME=
 # ssh mthuggin@elcapitan.csc.calpoly.edu
 #
 # Now on the server, got the proper directory and: 
-# docker run --rm -it -p 8887:8888 -v /data/mthuggin/tmp:/work -v /data/mthuggin/eddy:/data  py_general_docker:latest bash
+# docker run --rm -it -p 8887:8888  -e USER=$USER -v /data/mthuggin/tmp:/work -v /data/mthuggin/eddy2:/data  py_general_docker:latest bash
 #
 # Now in the container:
 # jupyter lab --no-browser --port 8888
 #
 # There will be a url like:
-# http://127.0.0.1:8888/lab?token=dc6f64d49c49b3a3aa72e2d8df9bb93ba2ec3a107baadd5b
+# http://127.0.0.1:8888/lab?token=64a10a3319e79ea2980352eb9f07b806c8dc418156b913fb
 # near the bottome of output.  Get the token from there.
 #
 # then in new terminal

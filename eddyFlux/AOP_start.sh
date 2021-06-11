@@ -11,16 +11,18 @@ while getopts ":h" option; do
    esac
 done
 
+DPID=$1
+SITE=$2
+YEAR=$3
+EASTING=$4
+NORTHING=$5
+BUFFER=$6
+TOKEN=$7
+SAVEPATH=$8
+
+docker build docker_base -t base_docker && \
+docker build docker_AOP -t aop_docker && \
+docker run --rm -it -v $PWD:/data -v $SAVEPATH:/savepath --user $(id -u):$(id -g) -e HOME=/data -w /data aop_docker $DPID $SITE $YEAR $EASTING $NORTHING $BUFFER $TOKEN
 
 
-
-
-
-docker build docker_AOP -t neon_utils_r_docker && \
-docker run --rm -it -v $PWD:/data -v $SAVEPATH:/savepath --user $(id -u):$(id -g) -e HOME=/data -w /data neon_utils_r_docker 'Rscript AOPdownload.R'
-
-# NOT THIS ONEEEEE!!!!! ./start.sh /media/data/AOP/eddy TEAK 2019-06 2019-07
-
-# ./AOP_start.sh /data/mthuggin/eddy2 TEAK 2017-06 2020-07 apiTokenHere
-
-# -u $(id -u):$(id -g)
+# ./AOP_start.sh DP3.30010.001 TEAK 2019 321516 4097400 10 $TOKEN /data/mthuggin/eddy2
