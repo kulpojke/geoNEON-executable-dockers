@@ -29,4 +29,7 @@ docker build docker_AOP -t aop_docker && \
 docker run --rm -it -v $PWD:/data -v $SAVEPATH:/savepath --user $(id -u):$(id -g) -e HOME=/data -w /data aop_docker $DPID $SITE $YEAR $EASTING $NORTHING $BUFFER $TOKEN
 
 
-# ./AOP_start.sh DP3.30010.001 TEAK 2019 321516 4097400 10 /data/mthuggin/eddy2 $TOKEN 
+# ./AOP_start.sh DP3.30006.001 TEAK 2019 321516 4097400 10 /data/mthuggin/eddy2 $TOKEN 
+
+# RGB is DP1.30010.001 (mosaic)
+# hyperspectral reflaectance is DP3.30006.001 (mosaic)
