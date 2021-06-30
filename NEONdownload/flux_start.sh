@@ -25,8 +25,9 @@ docker build docker_base -t base_docker && \
 docker build docker_flux -t flux_docker && \
 docker run --rm -it -v $PWD:/data -v $SAVEPATH:/savepath --user $(id -u):$(id -g) -e HOME=/data -w /data flux_docker $DPID $PACKAGE $SITE $STARTDATE $ENDDATE 
 
-# NOT THIS ONEEEEE!!!!! ./start.sh /media/data/AOP/eddy TEAK 2019-06 2019-07
-
 # ./flux_start.sh /data/mthuggin/eddy2 TEAK 2017-06 2020-07 apiTokenHere
+
+# ./flux_start.sh /data/mthuggin/eddy2 BART 2017-06 2020-07 $TOKEN
+
 
 # -u $(id -u):$(id -g)
