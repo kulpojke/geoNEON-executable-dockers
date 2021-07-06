@@ -19,6 +19,7 @@ docker run --rm -it  -v $WORKDIR:/work -v $DATAPATH:/data -e USER=$USER -e HOME=
 # docker run --rm -it -p 8887:8888  -e USER=$USER -v /data/mthuggin/tmp:/work -v /data/mthuggin/eddy2:/data  py_general_docker:latest bash
 #
 # Now in the container:
+# jupyter notebook password
 # jupyter lab --no-browser --port 8888
 #
 # There will be a url like:

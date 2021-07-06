@@ -21,6 +21,7 @@ ncores <- detectCores()
 library(dplyr)
 library(neonUtilities)
 library(doParallel)
+library(raster)
 
 # product IDs for soil CO2, Water, and Temp
 soilCO2ID <- 'DP1.00095.001'
@@ -150,15 +151,24 @@ merge_dfs_list <- function(list_of_dfs) {
 #-------------- flux -------------------------
 # bag the eddy flux data from the API
 zipsByProduct(dpID=dpID, package=package, 
-              site=site, 
+              site=site,
               startdate=startdate, enddate=enddate,
-              savepath=savepath, 
+              savepath=savepath,
               check.size=F, token=api_token)
 
 # extract the level 4 data
 filepath <- file.path(savepath, 'filesToStack00200')
 flux <- stackEddy(filepath=filepath,
                   level="dp04")
+
+# get the tower footprint
+print('Getting tower footprint')
+footprint <- footRaster(filepath=filepath)
+print('  Saving tower footprint')
+fname <- file.path(savepath, paste0(site, '_footprint.tif'))
+writeRaster(footprint, filename=fname, overwrite = TRUE)
+print(paste0('    Footprint written as ', fname))
+
 
 # get just the dataframe
 flux <- flux[[1]]

@@ -4,7 +4,13 @@ import gdal, osr
 import os
 import argparse
 import dask.array as da
+from dask import delayed, compute
+from dask.diagnostics import ProgressBar
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
 
+pbar = ProgressBar()
+pbar.register()
 
 def listmake_dataset(name,node):
     '''When fed to h5py.File.vivititems, returns a list of
@@ -61,45 +67,18 @@ def get_data(h5_path):
     return(data, wavelengths, epsg, resolution, xmin, ymin, xmax, ymax)
 
 
-
-
-if __name__ == '__main__':
-    # determine which tile the point is in. Actually this will be external, this is givebn tile
-    # maybe the container coordinator should do this in conjuntion with calling AOP downloader?
-    # maybe we should even group the points by tile, so we only have to open a tile once
-
-
-    # parse args
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--datapath', type=str, required=True,
-                        help='Directory from which paths to files will be given.')
-    parser.add_argument('--hyperspectral', type=str, required=True,
-                        help='Relative path to hyperspectral h5 from datapath.')
-    parser.add_argument('--outpath', type=str, required=True,
-                        help='Path in which to save output.')
-    parser.add_argument('--locations', nargs='?', default=None,
-                        help='''comma delimitted string of tuples of the coordinates
-                        for the points or boxes to extract.
-                        e.g. (x0, y0), (x1, y1),... in the case of points,
-                        or (xmin0, ymin0, xmax0, ymax0), (xmin1, ymin1, xmax1, ymax1),... 
-                        in the case of boxes.''')
-    parser.add_argument('--type', type=str, required=True,
-                        help='\'points\' or \'boxes\'.')
-    args = parser.parse_args()
-
-    if args.type == 'points':
-        points = [loc.lstrip(',( ') for loc in args.locations.split(')')[:-1]]
+def extract(h5_path, locations, ext_type):
+    if type == 'points':
+        points = [loc.lstrip(',( ') for loc in locations.split(')')[:-1]]
         points = [(float(i), float(j)) for i, j in [loc.split(',') for loc in points]]
-    elif args.type == 'boxes':
-        boxes = [loc.lstrip(',( ') for loc in args.locations.split(')')[:-1]]
+    elif type == 'boxes':
+        boxes = [loc.lstrip(',( ') for loc in locations.split(')')[:-1]]
         boxes = [(float(i), float(j), float(k), float(l)) for i, j, k, l in [loc.split(',') for loc in boxes]]
         points = None
     else:
         raise Exception('--type must be either \'points\' or \'boxes\'.')
 
-    # make full paths
-    h5_path = os.path.join(args.datapath, args.hyperspectral) 
-
+    
     #open the file and do all the band corrections stuff
     data, wavelengths, epsg, resolution, xmin, ymin, xmax, ymax = get_data(h5_path)
 
@@ -123,4 +102,90 @@ if __name__ == '__main__':
             box = data[xmin_:xmax_, ymin_:ymax_, :]
             # save box
             # TODO: save box
+
+def kmeans_classify(inpath, outpath, n_clusters):
+
+    #get data as array
+    src, wavelengths, epsg, resolution, xmin, ymin, xmax, ymax = get_data(h5_path)
+
+    # find dimendsions
+    X, Y, nbands = src.shape
+
+    # flatten each band
+    data = src.reshape(X * Y, nbands)
+
+    # classify
+    print('classifying')
+    km = KMeans(n_clusters=n_clusters) 
+    km.fit(data) 
+    km.predict(data)
+        
+    # specify driver
+    driverTiff = gdal.GetDriverByName('GTiff') 
     
+    # reshape and write to tiff
+    print('writing')
+    labels = km.labels_
+    centers = km.cluster_centers_
+    print(centers[labels].shape)
+    plt.figure(figsize=(20, 20))
+    plt.imsave(centers[labels], '/data/mthuggin/tmp/image.png')
+    
+    classed = driverTiff.Create(outpath, ras.RasterXSize, ras.RasterYSize, 1, gdal.GDT_Float32)
+    classed.SetGeoTransform(ras.GetGeoTransform())
+    classed.SetProjection(ras.GetProjection())
+    classed.GetRasterBand(1).SetNoDataValue(-9999.0)
+    classed.GetRasterBand(1).WriteArray(out_data)
+    classed = None
+
+
+    
+
+
+
+
+if __name__ == '__main__':
+    # determine which tile the point is in. Actually this will be external, this is givebn tile
+    # maybe the container coordinator should do this in conjuntion with calling AOP downloader?
+    # maybe we should even group the points by tile, so we only have to open a tile once
+
+
+    # parse args
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--datapath', type=str, required=True,
+                        help='Directory from which paths to files will be given.')
+    parser.add_argument('--hyperspectral', type=str, required=True,
+                        help='Relative path to hyperspectral h5 from datapath.')
+    parser.add_argument('--outpath', type=str, required=True,
+                        help='Path in which to save output.')
+    parser.add_argument('--locations', nargs='?', default=None,
+                        help='''comma delimitted string of tuples of the coordinates
+                        for the points or boxes to extract.
+                        e.g. (x0, y0), (x1, y1),... in the case of points,
+                        or (xmin0, ymin0, xmax0, ymax0), (xmin1, ymin1, xmax1, ymax1),... 
+                        in the case of boxes.''')
+    parser.add_argument('--mode', type=str, required=True,
+                        help='\'extract\' or \'kmeans\'.')
+    parser.add_argument('--type', type=str, required=False,
+                        help='\'points\' or \'boxes\'.')
+    args = parser.parse_args()
+
+    h5_path = os.path.join(args.datapath, args.hyperspectral)
+    tile = '_'.join(np.array(args.hyperspectral.split('/')[-1].split('_'))[[2,4,5]])
+    write_path = os.path.join(args.outpath, tile + '_classes.tif')
+
+    if args.mode == 'extract':
+        extract(h5_path, args.locations, args.type)
+
+    elif args.mode == 'kmeans':
+        kmeans_classify(h5_path, write_path, 7)
+
+
+
+
+
+
+
+
+
+
