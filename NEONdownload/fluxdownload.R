@@ -22,6 +22,7 @@ library(dplyr)
 library(neonUtilities)
 library(doParallel)
 library(raster)
+library(rgdal)
 
 # product IDs for soil CO2, Water, and Temp
 soilCO2ID <- 'DP1.00095.001'
@@ -161,15 +162,6 @@ filepath <- file.path(savepath, 'filesToStack00200')
 flux <- stackEddy(filepath=filepath,
                   level="dp04")
 
-# get the tower footprint
-print('Getting tower footprint')
-footprint <- footRaster(filepath=filepath)
-print('  Saving tower footprint')
-fname <- file.path(savepath, paste0(site, '_footprint.tif'))
-writeRaster(footprint, filename=fname, overwrite = TRUE)
-print(paste0('    Footprint written as ', fname))
-
-
 # get just the dataframe
 flux <- flux[[1]]
 
@@ -184,6 +176,46 @@ flux <- flux %>% select(timeBgn,
 
 # garbage collect, just in case
 gc()
+
+#-------------- footprint -------------------
+# get the tower footprint
+print('Getting tower footprint...')
+footprint <- footRaster(filepath=filepath)
+
+# create dir for footprints
+foot_path <- file.path(savepath, paste0(site, '_footprints'))
+
+if (!dir.exists(foot_path)) {
+  dir.create(foot_path)
+}
+# save the summary layer ( [[1]] ) of the footprint
+footsum <- footprint[[1]]
+
+fname <- file.path(foot_path, paste(site, startdate, 'footprint.tif', sep='_'))
+
+writeRaster(footsum, filename=fname, overwrite = TRUE)
+
+print(paste0('  ... footprint written as ', fname))
+
+# remove rasters /stacks to free memory
+rm(footsum)
+rm(footprint)
+gc()
+
+#-----initial soil characterization ----------
+# get initial soil characterization (DP1.10047.001) if it is not already there
+soil_char_dir <-file.path(savepath, paste0(site, '_DP1.10047.001'))
+
+if (!dir.exists(file.path(soil_char_dir, 'filesTOStack10047'))) {
+  dir.create(soil_char_dir)
+
+    zipsByProduct(dpID='DP1.10047.001', package=package, 
+                site=site,
+                startdate='2015-08', enddate='2021-06',
+                savepath=soil_char_dir,
+                check.size=F, token=api_token)    
+
+}
 
 #------------ soilCO2 ------------------------
 # download the soilCO2 product
