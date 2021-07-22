@@ -18,11 +18,12 @@ options(stringsAsFactors=F)
 # we'll need these
 library(parallel)
 ncores <- detectCores()
-library(dplyr)
+
 library(neonUtilities)
 library(doParallel)
 library(raster)
 library(rgdal)
+library(dplyr)
 
 # product IDs for soil CO2, Water, and Temp
 soilCO2ID <- 'DP1.00095.001'
@@ -151,6 +152,8 @@ merge_dfs_list <- function(list_of_dfs) {
 
 #-------------- flux -------------------------
 # bag the eddy flux data from the API
+print('Downloading flux data.')
+print('---------------------------------------')
 zipsByProduct(dpID=dpID, package=package, 
               site=site,
               startdate=startdate, enddate=enddate,
@@ -158,6 +161,8 @@ zipsByProduct(dpID=dpID, package=package,
               check.size=F, token=api_token)
 
 # extract the level 4 data
+print('Extracting flux data.')
+print('---------------------------------------')
 filepath <- file.path(savepath, 'filesToStack00200')
 flux <- stackEddy(filepath=filepath,
                   level="dp04")
@@ -190,12 +195,14 @@ if (!dir.exists(foot_path)) {
 }
 # save the summary layer ( [[1]] ) of the footprint
 footsum <- footprint[[1]]
+footsum <- reclassify(footsum, cbind(-Inf, 0, -9999), right=FALSE)
 
 fname <- file.path(foot_path, paste(site, startdate, 'footprint.tif', sep='_'))
 
+print(paste0('    ... saving tower footprint of dimension', dim(footsum), ' ...'))
 writeRaster(footsum, filename=fname, overwrite = TRUE)
 
-print(paste0('  ... footprint written as ', fname))
+print(paste0('    ... footprint written as ', fname))
 
 # remove rasters /stacks to free memory
 rm(footsum)
@@ -204,21 +211,31 @@ gc()
 
 #-----initial soil characterization ----------
 # get initial soil characterization (DP1.10047.001) if it is not already there
+# also put the soil volumatric water content zip in there to get sensor_positions
 soil_char_dir <-file.path(savepath, paste0(site, '_DP1.10047.001'))
 
-if (!dir.exists(file.path(soil_char_dir, 'filesTOStack10047'))) {
+if (!dir.exists(soil_char_dir)) {
   dir.create(soil_char_dir)
 
-    zipsByProduct(dpID='DP1.10047.001', package=package, 
-                site=site,
-                startdate='2015-08', enddate='2021-06',
-                savepath=soil_char_dir,
-                check.size=F, token=api_token)    
+  print('Downloading initial soil characterization (DP1.10047.001)')
+
+  zipsByProduct(dpID='DP1.10047.001', package=package, 
+              site=site,
+              startdate='2015-08', enddate='2021-06',
+              savepath=soil_char_dir,
+              check.size=F, token=api_token)    
+
+  zipsByProduct(dpID=soilH2OID, package=package, 
+              site=site,
+              startdate='2015-08', enddate='2021-06',
+              savepath=soil_char_dir,
+              check.size=F, token=api_token)
 
 }
 
 #------------ soilCO2 ------------------------
 # download the soilCO2 product
+print('------------ soilCO2 ------------------------')
 soilCO2 <- loadByProduct(soilCO2ID, site=site, 
                          timeIndex=30, package="basic", 
                          startdate=startdate, enddate=enddate,
@@ -234,6 +251,7 @@ soilCO2 <- sep_horizontal(soilCO2)
 gc()
 
 #------------ soilH2O ------------------------
+print('------------ soilH2O ------------------------')
 # download the soilH2O product
 soilH2O <- loadByProduct(soilH2OID, site=site, 
                          timeIndex=30, package="basic", 
@@ -250,6 +268,7 @@ soilH2O <- sep_horizontal(soilH2O)
 gc()
 
 #------------- soilT -------------------------
+print('------------- soilT -------------------------')
 # download the soilT product
 soilT <- loadByProduct(soilTID, site=site, 
                        timeIndex=30, package="basic", 

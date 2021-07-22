@@ -1,7 +1,7 @@
 #!/bin/sh
 
 docker build docker -t tfp_jupyter_docker && \
-docker run -it --rm --runtime=nvidia -u $(id -u):$(id -g) -v /data/mthuggin/eddy:/data -v $(realpath /data/mthuggin/notebooks):/tf/notebooks -p 8885:8888 tfp_jupyter_docker
+docker run -it --rm --runtime=nvidia -u $(id -u):$(id -g) -v /data/mthuggin/eddy2:/data -v $(realpath /data/mthuggin/notebooks):/tf/notebooks -p 8885:8888 tfp_jupyter_docker
 
 #
 #

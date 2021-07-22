@@ -8,6 +8,9 @@ import seaborn as sns
 import sys
 from math import sin, cos
 import argparse
+from zipfile import ZipFile
+
+tfd = tfp.distributions
 
 # ----------------------functions from the paper------------------------------
 # Saxton, K.E., Rawls, W., Romberger, J.S. and Papendick, R.I., 1986. 
@@ -73,7 +76,7 @@ def Ψ(Θ, clay, sand):
         return(0)
 
 
-def save_a_dang_verification_plot(verification_plot_path):
+def save_a_dang_verification_plot(plot_path):
     sand_clay = {'a': (20, 60),
                 'b': (8, 45),
                 'c': (10, 35),
@@ -97,7 +100,7 @@ def save_a_dang_verification_plot(verification_plot_path):
     plt.title('Compare to figure 4 in Saxton et al.')
     plt.xlabel('Volumetric Soil Moisture (fraction)')
     plt.ylabel('$\Psi$ (kPA)')
-    plt.savefig(verification_plot_path)
+    plt.savefig(os.path.join(plot_path, 'verification.png'))
 
 # ---------------------Other functions----------------------------------------   
 # from NEON_SPC_userGuide_vC.1.pdf
@@ -181,41 +184,76 @@ year={1986}
 
 # parse args
 parser = argparse.ArgumentParser()
-parser.add_argument('--verification_plot_path', type=str, required=False, help='''Path to location where vlaidation plot will be saved, if none no validation plot will be saved.''') 
-parser.add_argument('--spc_particlesize', type=str, required=False, help='''Path to NEON spc_particlesize csv.''')
-parser.add_argument('--spc_perplot', type=str, required=False, help='''Path to NEON spc_perplot csv.''')
-parser.add_argument('--sensor_positions', type=str, required=False, help='''Path to NEON sensor_positions csv.''')
+parser.add_argument('--site', type=str, required=True, help='''NEON site name''')
+parser.add_argument('--plot_path', type=str, required=False, help='''Path to location where plots will be saved, if none, no plots will be saved.''') 
 args = parser.parse_args() 
 
-if args.verification_plot_path:
-    save_a_dang_verification_plot(args.verification_plot_path)
 
-if args.spc_particlesize and args.spc_perplot:
+# unzip and read the soil characterization files
+zips = [f for f in os.listdir(f'/savepath/{site}_DP1.10047.001/filesTOStack10047') if str.endswith(.zip)]
 
-    # open the particle size csv
-    cols = ['plotID', 'horizonName', 'horizonID', 'sandTotal',
-            'clayTotal', 'biogeoCenterDepth']
+for z in zips:
+    with ZipFile(z, 'r') as zipthing:
+        zipthing.extractall(path=f'/savepath/{site}_DP1.10047.001/filesTOStack10047')
 
-    df1 = pd.read_csv(args.spc_particlesize, usecols=cols)
+spc_particlesize = [f for f in os.listdir(f'/savepath/{site}_DP1.10047.001/filesTOStack10047') if 'spc_particlesize' in f][0]
+spc_perplot      = [f for f in os.listdir(f'/savepath/{site}_DP1.10047.001/filesTOStack10047') if 'spc_perplot' in f][0]
 
-    # open the site location csv
-    cols = ['plotID', 'plotType', 'nlcdClass', 'decimalLongitude',
-            'decimalLatitude', 'coordinateUncertainty', 'elevation',
-            'elevationUncertainty', 'referenceCorner', 'sampleDistance',
-            'sampleBearing']
+# unzip and read the sensor_positions
+zips = [f for f in os.listdir(f'/savepath/{site}_DP1.10047.001/filesTOStack00094') if str.endswith(.zip)]
 
-    df2 = pd.read_csv(spc_perplot, usecols=cols)
+for z in zips:
+    with ZipFile(z, 'r') as zipthing:
+        contents = [f for f in zipthing.namelist() if 'sensor_positions' in f]
+        if len(contents > 1):
+            print(f'Warning: more than one sensor_positions file exists for {args.site}')
+        for lump in contents:
+        zipthing.extract(lump, f'/savepath/{site}_DP1.10047.001/filesTOStack00094/{site}sensor_positions.csv')
 
-    # find the pit locations
-    e, n, utm = find_pit_location(df2.plotID,
-                                df2.referenceCorner,
-                                df2.sampleDistance,
-                                df2.sampleBearing)
-    
-    df2['pit_easting'] = e
-    df2['pit_northing'] = n
-    df2['UTM_Zone'] = utm
+sensor_positions = f'/savepath/{site}_DP1.10047.001/filesTOStack00094/{site}sensor_positions.csv'
 
-    df = pd.merge(df1, df2, on='plotID')
+# save verification plot if need be
+if args.plot_path:
+    save_a_dang_verification_plot(args.plot_path)
+    print(f'verification plot saved to:\n{args.plot_path} ')
 
-    print(df.columns)
+
+
+# open the particle size csv
+cols = ['plotID', 'horizonName', 'horizonID', 'sandTotal',
+        'clayTotal', 'biogeoCenterDepth']
+
+df1 = pd.read_csv(spc_particlesize, usecols=cols)
+
+# open the site location csv
+cols = ['plotID', 'plotType', 'nlcdClass', 'decimalLongitude',
+        'decimalLatitude', 'coordinateUncertainty', 'elevation',
+        'elevationUncertainty', 'referenceCorner', 'sampleDistance',
+        'sampleBearing']
+
+df2 = pd.read_csv(spc_perplot, usecols=cols)
+
+# find the pit locations
+e, n, utm = find_pit_location(df2.plotID,
+                            df2.referenceCorner,
+                            df2.sampleDistance,
+                            df2.sampleBearing)
+
+df2['pit_easting'] = e
+df2['pit_northing'] = n
+df2['UTM_Zone'] = utm
+
+# merge dfs
+df = pd.merge(df1, df2, on='plotID')
+
+print(df.columns)
+
+dirt_plot = sns.jointplot(y='clayTotal', x='sandTotal', data=df)
+fig = dirt_plot.get_figure()
+fig.savefig(os.path.join(plot_path, site + '_sand_clay_jointplot.png'))
+
+sand_mean = df.sandTotal.mean()
+sand_var  = df.sandTotal.var()
+
+clay_mean = df.clayTotal.mean()
+clay_var  = df.clayTotal.var()
