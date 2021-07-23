@@ -42,6 +42,14 @@ sep_vertical <- function(sensor_data) {
   idx <- which(grepl('30_minute', names(sensor_data)), arr.ind=TRUE)
   # now get the data using the index
   df <- sensor_data[[idx]]
+  if ("finalQF" %in% names(df)) {
+    df <- rename_with(df, .fn = ~paste0( ., sufx), .cols = finalQF)
+  } # this line is an exmaple of R making the simplist task unreadable and confusing
+
+  # remane the finalQF file to by uunambigous after merge
+  sufx <- unlist(strsplit(names(sensor_data)[[idx]], '_'))[[1]]
+
+ 
   # get the positions
   positions <- unique(df[c("verticalPosition")])[[1]]
   # make an empty list
