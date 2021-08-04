@@ -30,7 +30,8 @@ soilCO2ID <- 'DP1.00095.001'
 soilH2OID <- 'DP1.00094.001'
 soilTID   <- 'DP1.00041.001'
 precipID  <- 'DP1.00006.001'
-
+timeIndex <- 30
+interval <- '30_minute'
 
 # -------------- function definitions --------------------------------------
 
@@ -38,8 +39,8 @@ sep_vertical <- function(sensor_data) {
   #' function to seperate sensor data into a list of dfs by verticalPosition
   #' @param sensor_data -- the sensor data as returned by neonUtilities::loadByProduct()
   
-  # find the index of the 30_minute data for this data product
-  idx <- which(grepl('30_minute', names(sensor_data)), arr.ind=TRUE)
+  # find the index of the  data coresponding to the time interval
+  idx <- which(grepl(interval, names(sensor_data)), arr.ind=TRUE)
   # now get the data using the index
   df <- sensor_data[[idx]]
   if ("finalQF" %in% names(df)) {
@@ -101,12 +102,16 @@ sep_horizontal <- function(list_of_dfs) {
 precip_prune <- function(precip_data) {
   #' function to select only the desired columns from the precip table
   
-  # find the index of the 30_minute data, prefer SECPRE but fall back 
+  # find the index of the interval appropriate data, prefer SECPRE but fall back 
   # to PRIPRE (bc KNOWN ISSUE 2020-06-10). keep track of which with pri_sec
-  idx <- which(grepl('SECPRE_30min', names(precip_data)), arr.ind=TRUE)
+  if (timeIndex == 30) {
+    sufx = '_30min'
+  } else { suxf = '_1min'}
+
+  idx <- which(grepl(paste0('SECPRE', sufx), names(precip_data)), arr.ind=TRUE)
   pri_sec <- 2
   if (length(idx) != 1) {
-    idx <- which(grepl('PRIPRE_30min', names(precip_data)), arr.ind=TRUE)
+    idx <- which(grepl(paste0('PRIPRE', sufx), names(precip_data)), arr.ind=TRUE)
     pri_sec <- 1
   }
   
@@ -245,7 +250,7 @@ if (!dir.exists(soil_char_dir)) {
 # download the soilCO2 product
 print('------------ soilCO2 ------------------------')
 soilCO2 <- loadByProduct(soilCO2ID, site=site, 
-                         timeIndex=30, package="basic", 
+                         timeIndex=timeIndex, package="basic", 
                          startdate=startdate, enddate=enddate,
                          check.size=F, nCores=ncores, token=api_token)
 
@@ -262,7 +267,7 @@ gc()
 print('------------ soilH2O ------------------------')
 # download the soilH2O product
 soilH2O <- loadByProduct(soilH2OID, site=site, 
-                         timeIndex=30, package="basic", 
+                         timeIndex=timeIndex, package="basic", 
                          startdate=startdate, enddate=enddate,
                          check.size=F, nCores=ncores, token=api_token)
 
@@ -279,7 +284,7 @@ gc()
 print('------------- soilT -------------------------')
 # download the soilT product
 soilT <- loadByProduct(soilTID, site=site, 
-                       timeIndex=30, package="basic", 
+                       timeIndex=timeIndex, package="basic", 
                        startdate=startdate, enddate=enddate,
                        check.size=F, nCores=ncores, token=api_token)
 
@@ -295,7 +300,7 @@ gc()
 #------------- precip ------------------------
 # download the precip product
 precip <- loadByProduct(precipID, site=site, 
-                        timeIndex=30, package="basic", 
+                        timeIndex=timeIndex, package="basic", 
                         startdate=startdate, enddate=enddate,
                         check.size=F, nCores=ncores, token=api_token)
 
