@@ -43,14 +43,13 @@ sep_vertical <- function(sensor_data) {
   idx <- which(grepl(interval, names(sensor_data)), arr.ind=TRUE)
   # now get the data using the index
   df <- sensor_data[[idx]]
+
+  # remane the finalQF cols to be unambigous after merge
+  sufx <- unlist(strsplit(names(sensor_data)[[idx]], '_'))[[1]]
   if ("finalQF" %in% names(df)) {
     df <- rename_with(df, .fn = ~paste0( ., sufx), .cols = finalQF)
   } # this line is an exmaple of R making the simplist task unreadable and confusing
 
-  # remane the finalQF file to by uunambigous after merge
-  sufx <- unlist(strsplit(names(sensor_data)[[idx]], '_'))[[1]]
-
- 
   # get the positions
   positions <- unique(df[c("verticalPosition")])[[1]]
   # make an empty list
@@ -240,7 +239,7 @@ if (!dir.exists(soil_char_dir)) {
 
   zipsByProduct(dpID=soilH2OID, package=package, 
               site=site,
-              startdate='2015-08', enddate='2021-06',
+              startdate='2020-012', enddate='2021-06',
               savepath=soil_char_dir,
               check.size=F, token=api_token)
 
