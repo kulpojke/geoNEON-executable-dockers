@@ -4,7 +4,7 @@ Dockers with executable scripts to be called from the command line.  I try to ma
 
 ## Setup ##
 
-You need to have docker installed (or Singularity).
+You need to have docker installed.
 
 ## Executale dockers ##
 
