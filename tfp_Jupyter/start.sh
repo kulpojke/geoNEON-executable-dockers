@@ -12,5 +12,4 @@ docker run -it --rm --runtime=nvidia -u $(id -u):$(id -g) -v /data/mthuggin/eddy
 # go to localhost:1234 in browser, use the token from above to log in.
 
 
-# 
-# 3bc6433f1296af1446c40ce8bed50fde9dd4bd775a0e770a
+# 1712686dd827ebd1897be18c8da7a94b2df95c646f4fad0e
